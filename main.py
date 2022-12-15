@@ -1,7 +1,8 @@
 # import turtle library
 import turtle
 import random 
-
+# importing "heapq" to implement heap queue
+import heapq
 
 # mountain draw
 def mountainDraw(i, j):
@@ -205,7 +206,7 @@ def createMountain():
             for y in range(u[1]-1, u[1]+2):
                 if regionMap[x][y] == 0: continue
                 if specialMap[x][y] != '0': continue
-                if random.random() <= 0.2:
+                if random.random() <= 0.15:
                     specialMap[x][y] = 'M'
                     que.append([x, y])
 
@@ -232,6 +233,45 @@ def checkIsReachable(tLst, pLst):
             res.append(u)
     
     return res
+
+# create path from prison to treasure
+def createPathToTreasure(st, en):
+    que = [(0, st)]
+    vis = [[False for j in range(N)] for i in range(N)]
+    dp = [[1000000000 for j in range(N)] for i in range(N)]
+    trace = [[[-1, -1] for j in range(N)] for i in range(N)]
+    k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+    dp[st[0]][st[1]] = 0
+    heapq.heapify(que)
+    while len(que) > 0:
+        u = heapq.heappop(que)[1]
+        if vis[u[0]][u[1]]: continue
+        # create path
+        if u[0] == en[0] and u[1] == en[1]:
+            while u[0] != st[0] or u[1] != st[1]:
+                if specialMap[u[0]][u[1]] == 'M':
+                    specialMap[u[0]][u[1]] = '0'
+                u = trace[u[0]][u[1]]
+            break
+        # ***
+        vis[u[0]][u[1]] = True
+        for z in k:
+            v = [u[0] + z[0], u[1] + z[1]]
+            if vis[v[0]][v[1]]: continue
+            if regionMap[v[0]][v[1]] == 0: continue
+            w = dp[u[0]][u[1]]
+            if specialMap[u[0]][u[1]] == 'M':
+                w += 15
+            else:
+                w += 1
+            if w < dp[v[0]][v[1]]:
+                dp[v[0]][v[1]] = w
+                trace[v[0]][v[1]] = u
+                heapq.heappush(que, (w, v))
+
+
+
+
 
 # create prison and treasure
 def createPrisonTreasure():
@@ -263,7 +303,11 @@ def createPrisonTreasure():
     
     # list of prison that can't go to treasure
     lstPrison = checkIsReachable(treasure, prison)
-    print(lstPrison)
+    for u in lstPrison:
+        createPathToTreasure(u, treasure[0])
+    # check again
+    #lstPrison = checkIsReachable(treasure, prison)
+    #print(lstPrison)
 
 
 # MAP GENERATOR
@@ -325,5 +369,5 @@ def main(scWidth, scHeight, size):
 # __name__
 if __name__=="__main__":
     # screen width, height + island size
-    main(1800, 900, 80)
+    main(1800, 900, 16)
     turtle.done()
