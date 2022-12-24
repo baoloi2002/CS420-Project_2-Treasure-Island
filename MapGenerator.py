@@ -108,7 +108,7 @@ def checkIsReachable(tLst, pLst):
         for z in k:
             v = [u[0] + z[0], u[1] + z[1]]
             if regionMap[v[0]][v[1]] == 0: continue
-            if specialMap[v[0]][v[1]] == "M": continue
+            if specialMap[v[0]][v[1]] == "M" or specialMap[v[0]][v[1]] == "P" : continue
             if vis[v[0]][v[1]]: continue
             vis[v[0]][v[1]] = True
             que.append(v)
@@ -145,6 +145,7 @@ def createPathToTreasure(st, en):
             v = [u[0] + z[0], u[1] + z[1]]
             if vis[v[0]][v[1]]: continue
             if regionMap[v[0]][v[1]] == 0: continue
+            if specialMap[u[0]][u[1]] == 'P': continue
             w = dp[u[0]][u[1]]
             if specialMap[u[0]][u[1]] == 'M':
                 w += 20
@@ -217,7 +218,7 @@ def printToFile():
     with  open("Map.txt", "w") as f:
         f.write(str(N) + " " + str(N) + "\n")
         f.write(str(random.randint(2, 4)) + "\n")
-        f.write(str(random.randint(2, 4)) + "\n")
+        f.write(str(random.randint(5, 30)) + "\n")
         setReg = []
         for u in regionMap:
             for v in u:
