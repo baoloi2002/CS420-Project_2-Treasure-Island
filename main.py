@@ -155,14 +155,14 @@ def Hint_15(isTrue):
 
 
 ################################################################################################################
-def doSTH():
+def doSTH(action):
     pass
 
 def Reveal():
-    pass
+    return [0, [Px, Py]]
 
 def hintCreate(isTrue):
-    hint = random.randint(1, 15)
+    hint = random.randint(1, 5)# 6 - 15 chưa xong
     if hint == 1:
         return [hint, Hint_1(isTrue)]
     if hint == 2:
@@ -195,13 +195,35 @@ def hintCreate(isTrue):
         return [hint, Hint_15(isTrue)]
     return [16, [0, 0]]
 
+def shortestPath(s, t): # BFS to find shortest path
+    que = []
+    vis = [[False for j in range(M)] for i in range(N)]
+    k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+    que.append([s, 0])
+    vis[s[0]][t[0]]
+    while len(que) > 0:
+        u, w = que.pop(0)
+
+        for z in k:
+            v = [u[0] + z[0], u[1] + z[1]]
+            if regionMap[v[0]][v[1]] == 0: continue
+            if specialMap[v[0]][v[1]] == "M": continue
+            if vis[v[0]][v[1]]: continue
+            vis[v[0]][v[1]] = True
+            if v[0] == t[0] and v[1] == t[1]:
+                return w+1
+            que.append(list(v, w+1))
+    # Something went wrong
+    return -1
+
+
 def startGame():
     global agent
-    agent = AgentP()
+    agent = AgentP()# START GAME INPUT MAP and current location
     # Before Pirate Out (N turns)
     hintList = []
-    for i in range(N):        
-        if i == pirateReveal:
+    for i in range(pirateFree):        
+        if i+1 == pirateReveal:
             agent.getInformation(Reveal())
         if i == 0:
             hintList.append(True)
@@ -215,9 +237,22 @@ def startGame():
             doSTH(agent.makeMove())
 
     # After Pirate Out
+    len = shortestPath([Px, Py], [Tx, Ty])
+    len = (len+1)//2
+
+    for i in range(len):        
+        if i+1 == pirateReveal:
+            agent.getInformation(Reveal())
+        hintList.append(random.choice([True, False]))
+        agent.getInformation(hintCreate(hintList[-1]))
+        doSTH(agent.makeMove())
+        doSTH(agent.makeMove())
+
+    # Pirate WIN
+    #...
 
 def input():
-    global N, M, regionMap, specialMap, pirateReveal, pirateFree, numRegion, Tx, Ty, boundaryMap, status
+    global N, M, regionMap, specialMap, pirateReveal, pirateFree, numRegion, Tx, Ty, boundaryMap, status, Px, Py, Ax, Ay
     with open("Map.txt", "r") as f:
         N, M = [int(u) for u in f.readline().split()]
         pirateReveal = int(f.readline()) -1
@@ -239,10 +274,15 @@ def input():
                 if len(tmp[j]) == 2:
                     specialMap[i][j] = tmp[j][1]
                 regionMap[i][j] = tmp[j][0]
-
+    tmp = []
+    for i in range(N):
+        for j in range(M):
+            if specialMap[i][j] == 'P':
+                tmp.append((i, j))
+    Px, Py = random.choice(tmp)
 
 
 if __name__ == '__main__':
-    MapGenerator.main(16)
+    #MapGenerator.main(16)
     input()
     startGame()
