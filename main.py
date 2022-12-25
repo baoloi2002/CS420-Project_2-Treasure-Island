@@ -94,21 +94,52 @@ def Hint_5(isTrue):
 
 def Hint_6(isTrue):
     if isTrue:
-        pass
+        if abs(Ax-Tx)**2 + abs(Ay-Ty)**2 < abs(Px-Tx)**2 + abs(Py-Ty)**2:
+            return "YOU"
+        else:
+            return "PIRATE"
     else:
-        pass
+        if abs(Ax-Tx)**2 + abs(Ay-Ty)**2 >= abs(Px-Tx)**2 + abs(Py-Ty)**2:
+            return "YOU"
+        else:
+            return "PIRATE"
 
 def Hint_7(isTrue):
+    
     if isTrue:
-        pass
+        if random.randint(0, 1):
+            return ["ROW", Tx]
+        else:
+            return ["COL", Ty]
     else:
-        pass
+        if random.randint(0, 1):
+            u = random.randint(0, N-1)
+            while u == Tx:
+                u = random.randint(0, N-1)
+            return ["ROW", u]
+        else:
+            u = random.randint(0, M-1)
+            while u == Ty:
+                u = random.randint(0, M-1)
+            return ["COL", u]
     
 def Hint_8(isTrue):
     if isTrue:
-        pass
+        if random.randint(0, 1):
+            u = random.randint(0, N-1)
+            while u == Tx:
+                u = random.randint(0, N-1)
+            return ["ROW", u]
+        else:
+            u = random.randint(0, M-1)
+            while u == Ty:
+                u = random.randint(0, M-1)
+            return ["COL", u]
     else:
-        pass
+        if random.randint(0, 1):
+            return ["ROW", Tx]
+        else:
+            return ["COL", Ty]
 
 def Hint_9(isTrue):
     if isTrue:
@@ -156,6 +187,8 @@ def Hint_15(isTrue):
 
 ################################################################################################################
 def doSTH(action):
+    global Px, Py
+    direction = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     if action[0] == 0:
         u = action[1]
         LOG.append("AGENT TELEPORT TO " + str(u))
@@ -165,13 +198,41 @@ def doSTH(action):
         Ay = u[1]
         return
     if action[0] == 1:
-        pass
+        u = action[1]
+        LOG.append("AGENT VERIFY HINT " + str(u) + " " + str(hintList[u]))
+        agent.getVerification(hintList[u])
+        return
     if action[0] == 2:
-        pass
+        LOG.append("AGENT ACTION 2")
+        u = action[1]
+        z = direction[u[0]]
+        for i in range(u[1]):
+            v = [Px + z[0], Py + z[1]]
+            if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
+                Px += v[0]
+                Py += v[1]
+        # Small scan 5x5
+        LOG.append("AGENT SMALL SCAN " + str(u))
+        if abs(Tx - Ax) <= 2 and abs(Ty - Ay) <= 2:
+            status = "WIN"
+        return
+
     if action[0] == 3:
-        pass
+        LOG.append("AGENT ACTION 3")
+        u = action[1]
+        z = direction[u[0]]
+        for i in range(u[1]):
+            v = [Px + z[0], Py + z[1]]
+            if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
+                Px += v[0]
+                Py += v[1]
+
     if action[0] == 4:
-        pass
+        LOG.append("AGENT LARGE SCAN " + str(u))
+        # Large scan 7x7
+        if abs(Tx - Ax) <= 3 and abs(Ty - Ay) <= 3:
+            status = "WIN"
+        return
 
 def Reveal():
     global LOG
@@ -179,7 +240,7 @@ def Reveal():
     return [0, [Px, Py]]
 
 def hintCreate(isTrue):
-    hint = random.randint(1, 5)# 6 - 15 chưa xong
+    hint = random.randint(1, 8)# 9 - 15 chưa xong
     res = [16, [0, 0]]
     if hint == 1:
         res =  [hint, Hint_1(isTrue)]
@@ -237,7 +298,7 @@ def shortestPath(s, t): # BFS to find shortest path
 
 
 def startGame():
-    global agent, LOG, status
+    global agent, LOG, status, hintList
     while True:
         Ax = random.randint(0, N-1)
         Ay = random.randint(0, M-1)

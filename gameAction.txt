@@ -30,3 +30,15 @@ bigger one, the treasure is somewhere inside the gap between 2
 squares. (rare)
 15: The treasure is in a region that has mountain.
 16: 
+
+## 
+x = row
+y = column
+a[x][y] = row x column y
+
+direction
+0 - up    - (-1, 0)
+1 - down  - (1, 0)
+2 - left  - (0, -1)
+3 - right - (0, 1)
+

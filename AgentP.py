@@ -7,3 +7,6 @@ class Agent:
 
     def makeMove(selft):
         return [4]
+    
+    def getVerification(selft, verify):
+        pass
