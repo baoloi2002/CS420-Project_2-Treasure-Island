@@ -160,10 +160,22 @@ def Hint_11(isTrue):
         pass
 
 def Hint_12(isTrue):
+    lst = []
+    lst.append([[0, 0], [N-1, M//2]])
+    lst.append([[0, 0], [N//2, M-1]])
+    lst.append([[N//2, 0], [N-1, M-1]])
+    lst.append([[0, M//2], [N-1, M-1]])
+    random.shuffle(lst)
     if isTrue:
-        pass
+        for u in lst:
+            if u[0][0] <= Tx and Tx <= u[1][0] and u[0][1] <= Ty and Ty <= u[1][1]:
+                continue
+            return u
     else:
-        pass
+        for u in lst:
+            if u[0][0] <= Tx and Tx <= u[1][0] and u[0][1] <= Ty and Ty <= u[1][1]:
+                return u
+    return -1
 
 def Hint_13(isTrue):
     if isTrue:
@@ -178,10 +190,21 @@ def Hint_14(isTrue):
         pass
 
 def Hint_15(isTrue):
+    res = []
+    for i in range(N):
+        for j in range(M):
+            if specialMap[i][j] == 'M':
+                if regionMap[i][j] not in res:
+                    res.append(regionMap[i][j])
     if isTrue:
         pass
     else:
-        pass
+        tmp = []
+        for i in range(1,numRegion+1):
+            if i not in res:
+                tmp.append(i)
+        return tmp
+    return res
 
 
 
