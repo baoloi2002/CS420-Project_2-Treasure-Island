@@ -1,6 +1,7 @@
 import MapGenerator
 from AgentP import Agent
 import random
+import Visualization
 
 ################################################################################################################
 def Hint_1(isTrue):
@@ -424,3 +425,4 @@ if __name__ == '__main__':
     input()
     startGame()
     output()
+    Visualization.main(LOG)
