@@ -210,7 +210,7 @@ def Hint_15(isTrue):
 
 ################################################################################################################
 def doSTH(action):
-    global Px, Py
+    global Ax, Ay, status
     direction = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     if action[0] == 0:
         u = action[1]
@@ -220,38 +220,40 @@ def doSTH(action):
         Ax = u[0]
         Ay = u[1]
         return
+
     if action[0] == 1:
         u = action[1]
         LOG.append("AGENT VERIFY HINT " + str(u) + " " + str(hintList[u]))
         agent.getVerification(hintList[u])
         return
+
     if action[0] == 2:
-        LOG.append("AGENT ACTION 2")
         u = action[1]
+        LOG.append("AGENT ACTION 2: " + str(u))
         z = direction[u[0]]
         for i in range(u[1]):
-            v = [Px + z[0], Py + z[1]]
+            v = [Ax + z[0], Ay + z[1]]
             if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
-                Px += v[0]
-                Py += v[1]
+                Ax += v[0]
+                Ay += v[1]
         # Small scan 5x5
-        LOG.append("AGENT SMALL SCAN " + str(u))
+        LOG.append("AGENT SMALL SCAN")
         if abs(Tx - Ax) <= 2 and abs(Ty - Ay) <= 2:
             status = "WIN"
         return
 
     if action[0] == 3:
-        LOG.append("AGENT ACTION 3")
         u = action[1]
+        LOG.append("AGENT ACTION 3: " + str(u))
         z = direction[u[0]]
         for i in range(u[1]):
-            v = [Px + z[0], Py + z[1]]
+            v = [Ax + z[0], Ay + z[1]]
             if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
-                Px += v[0]
-                Py += v[1]
+                Ax += v[0]
+                Ay += v[1]
 
     if action[0] == 4:
-        LOG.append("AGENT LARGE SCAN " + str(u))
+        LOG.append("AGENT LARGE SCAN")
         # Large scan 7x7
         if abs(Tx - Ax) <= 3 and abs(Ty - Ay) <= 3:
             status = "WIN"
@@ -321,7 +323,7 @@ def shortestPath(s, t): # BFS to find shortest path
 
 
 def startGame():
-    global agent, LOG, status, hintList
+    global agent, LOG, status, hintList, Ax, Ay
     while True:
         Ax = random.randint(0, N-1)
         Ay = random.randint(0, M-1)
@@ -331,6 +333,7 @@ def startGame():
         break
 
     agent = Agent(N, M, regionMap, specialMap, Ax, Ay)# START GAME INPUT MAP and current location
+    LOG.append("AGENT START " + str(Ax) + " " + str(Ay))
     # Before Pirate Out (N turns)
     hintList = []
     for i in range(pirateFree-1):       
