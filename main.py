@@ -143,10 +143,27 @@ def Hint_8(isTrue):
             return ["COL", Ty]
 
 def Hint_9(isTrue):
+    boundary = []
+    for i in range(Tx-1, Tx+2):
+        for j in range(Ty-1, Ty+2):
+            if i < 0 or j < 0 or i >= N or j >= M: continue
+            if regionMap[i][j] not in boundary:
+                boundary.append(regionMap[i][j])
+
+    res = []
     if isTrue:
-        pass
+        res.append(random.choice(boundary))
+        while len(res) < 2:
+            u = random.randint(0, numRegion)
+            if u in boundary: continue
+            res.append(u)
+            boundary.append(u)
     else:
-        pass
+        while len(res) < 2:
+            u = random.randint(0, numRegion)
+            if u in boundary: continue
+            res.append(u)
+            boundary.append(u)
 
 def Hint_10(isTrue):
     if isTrue:
@@ -211,11 +228,13 @@ def Hint_15(isTrue):
 
 ################################################################################################################
 def doSTH(action):
+    LOG.append("AGENT")
     global Ax, Ay, status
     direction = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     if action[0] == 0:
         u = action[1]
-        LOG.append("AGENT TELEPORT TO " + str(u))
+        LOG.append("TELEPORT")
+        LOG.append(str(u[0]) + " " + str(u[1]))
         if u[0] == Tx and u[1] == Ty:
             status = "WIN"
         Ax = u[0]
@@ -224,7 +243,9 @@ def doSTH(action):
 
     if action[0] == 1:
         u = action[1]
-        LOG.append("AGENT VERIFY HINT " + str(u) + " " + str(hintList[u]))
+        LOG.append("VERIFY")
+        LOG.append(str(u))
+        LOG.append(str(hintList[u]))
         agent.getVerification(hintList[u])
         return 1
 
@@ -268,6 +289,8 @@ def Reveal():
 
 def hintCreate(isTrue):
     hint = random.randint(1, 8)# 9 - 15 chưa xong
+    LOG.append("HINT " + str(len(hintList)))
+    LOG.append(str(hint))
     res = [16, [0, 0]]
     if hint == 1:
         res =  [hint, Hint_1(isTrue)]
@@ -299,7 +322,6 @@ def hintCreate(isTrue):
         res =  [hint, Hint_14(isTrue)]
     if hint == 15:
         res =  [hint, Hint_15(isTrue)]
-    LOG.append("HINT " + str(isTrue) + " " + str(res))
     return res
 
 def shortestPath(s, t): # BFS to find shortest path
@@ -335,11 +357,12 @@ def startGame():
         break
 
     agent = Agent(N, M, regionMap, specialMap, Ax, Ay)# START GAME INPUT MAP and current location
-    LOG.append("AGENT START " + str(Ax) + " " + str(Ay))
+    LOG.append("START")
+    LOG.append("AGENT:" + str(Ax) + " " + str(Ay))
     # Before Pirate Out (N turns)
     hintList = []
     for i in range(pirateFree-1):       
-        LOG.append("TURN_"+str(i+1))
+        LOG.append("TURN "+str(i+1))
         if i+1 == pirateReveal:
             agent.getInformation(Reveal())
         if i == 0:
@@ -361,9 +384,9 @@ def startGame():
     len = (len+1)//2
 
     for i in range(len):        
-        LOG.append("TURN_"+str(i+pirateFree))
+        LOG.append("TURN "+str(i+pirateFree) + " : " + str(len-i-1) + " turns left to pirate to the treasure")
         if i == 0:
-            LOG.append("Pirate FREE")
+            LOG.append("FREE PIRATE")
         if i+1 == pirateReveal:
             agent.getInformation(Reveal())
         hintList.append(random.choice([True, False]))
@@ -375,7 +398,6 @@ def startGame():
 
     # Pirate WIN
     #...
-    LOG.append("PIRATE REACH THE TREASURE FIRST !!!")
     status = "LOSE"
 
 
