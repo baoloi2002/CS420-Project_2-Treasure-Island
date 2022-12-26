@@ -10,15 +10,46 @@ import numpy as np
 
 # mountain draw
 def mountainDraw(i, j):
-    pass
+    global image
+    x = j*boxW + leftCorner
+    y = i*boxH + topCorner
+    xx = x + boxW-1
+    yy = y + boxH-1
+    
+    color = (0, 0, 0)
+    image = cv2.line(image, (x, y), (xx, yy), color, 1)
+    image = cv2.line(image, (x, yy), (xx, y), color, 1)
+
 
 # treasure Draw
 def treasureDraw(i, j):
-    pass
+    global image
+    x = j*boxW + leftCorner
+    y = i*boxH + topCorner
+    xx = x + boxW-1
+    yy = y + boxH-1
+
+    midx = (x+xx)//2
+    midy = (y+yy)//2
+    r = min(midx-x, midy-y)
+    color = (255, 0, 0)
+    image = cv2.circle(image, (midx, midy), r, color, -1)
+    color = (0, 255, 0)
+    image = cv2.circle(image, (midx, midy), int(r/1.5), color, -1)
+    color = (0, 0, 255)
+    image = cv2.circle(image, (midx, midy), int(r/2.5), color, -1)
 
 # prison Draw
 def prisonDraw(i, j):
-    pass
+    global image
+    x = j*boxW + leftCorner
+    y = i*boxH + topCorner
+    xx = x + boxW-1
+    yy = y + boxH-1
+
+    color = (0, 0, 0)
+    image = cv2.line(image, (x, (y+yy)//2), (xx, (y+yy)//2), color, 2)
+    image = cv2.line(image, ((x+xx)//2, y), ((x+xx)//2, yy), color, 2)
 
 # boundary draw
 def boundaryDraw(i, j):
@@ -73,7 +104,7 @@ def mapDrawer():
             boundaryDraw(i, j)            
 
 # MAIN
-def main(scWidth, scHeight, row, col, region, special, boundary):
+def main(scWidth, scHeight, row, col, region, special, boundary, Tx, Ty, color):
 
 
     global image
@@ -91,18 +122,13 @@ def main(scWidth, scHeight, row, col, region, special, boundary):
 
     regionMap = region
     specialMap = special
+    specialMap[Tx][Ty] = 'T'
     boundaryMap = boundary
     
     leftCorner = 0
     topCorner = 0
 
-    colorMap = [(255, 204, 204), (255, 204, 153), (255, 255, 102), (153, 255, 51), (0, 255, 0),
-                (0, 204, 102), (0, 153, 153), (255, 51, 51), (192, 192, 192), (96, 96, 96),
-                (255, 0, 127), (255, 204, 255), (102, 102, 255), (51, 255, 153), (51, 51, 0),
-                (255, 230, 102)]
-    
-    #random.shuffle(colorMap)
-    colorMap = [(0, 0, 102)] + colorMap
+    colorMap = color
 
     image = np.zeros((mapHeight, mapWidth, 3), np.uint8)
 

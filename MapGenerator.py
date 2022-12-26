@@ -47,34 +47,41 @@ def smoothLand():
 def createLand():
     global regionMap
     que = []
-    que.append([[N//2, N//2], 0.99])
     rateDown = 1 - (64/N)*2/100
     k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     vis = [[False for j in range(N)] for i in range(N)]
-    cLim = 16 - 128//N
+    cLim = 20 - 128//N
     co = [i for i in range(2, cLim+1)]
+    weight = {}
+    weight[1] = 1
+    heapq.heappush(que, (1, ((N//2, N//2), 0.99)))
 
     regionMap[N//2][N//2] = 1
     vis[N//2][N//2] = True
     while len(que) > 0:
-        u = que[0][0]
-        r = que[0][1]
-        que.pop(0)
-        if random.random() <= 0.01:
-            random.shuffle(que)
+        tmp = heapq.heappop(que)[1]
+        u = tmp[0]
+        r = tmp[1]
 
         for z in k:
-            v = [u[0]+z[0], u[1]+z[1]]
+            v = (u[0]+z[0], u[1]+z[1])
             if v[0] < 1 or v[0] >= N-1 or v[1] < 1 or v[1] >= N-1: continue
             if vis[v[0]][v[1]]: continue
             
             if random.random() <= r:
-                vis[v[0]][v[1]] = True
-                que.append([v, r*rateDown])                
+                vis[v[0]][v[1]] = True         
                 regionMap[v[0]][v[1]] = int(regionMap[u[0]][u[1]])
                 if len(co) > 0:
-                    if random.random() <= 0.15:
+                    if random.random() <= 0.1:
                         regionMap[v[0]][v[1]] = co.pop(0)
+                        weight[regionMap[v[0]][v[1]]] = 1
+                        heapq.heappush(que, (weight[regionMap[v[0]][v[1]]], (v, r*rateDown)))
+                    else:
+                        weight[regionMap[v[0]][v[1]]] += 1
+                        heapq.heappush(que, (weight[regionMap[v[0]][v[1]]], (v, r*rateDown)))
+                else:
+                    weight[regionMap[v[0]][v[1]]] += 1
+                    heapq.heappush(que, (weight[regionMap[v[0]][v[1]]], (v, r*rateDown)))
                     
 # create mountain
 def createMountain():
@@ -83,7 +90,7 @@ def createMountain():
     for i in range(N):
         for j in range(N):
             if regionMap[i][j] == 0: continue
-            if random.random() <= 0.1:
+            if random.random() <= 0.05:
                 que.append([i, j])
                 specialMap[i][j] = 'M'
     while len(que):
@@ -92,7 +99,7 @@ def createMountain():
             for y in range(u[1]-1, u[1]+2):
                 if regionMap[x][y] == 0: continue
                 if specialMap[x][y] != ' ': continue
-                if random.random() <= 0.15:
+                if random.random() <= 0.2:
                     specialMap[x][y] = 'M'
                     que.append([x, y])
 
@@ -145,10 +152,10 @@ def createPathToTreasure(st, en):
             v = [u[0] + z[0], u[1] + z[1]]
             if vis[v[0]][v[1]]: continue
             if regionMap[v[0]][v[1]] == 0: continue
-            if specialMap[u[0]][u[1]] == 'P': continue
+            if specialMap[v[0]][v[1]] == 'P': continue
             w = dp[u[0]][u[1]]
             if specialMap[u[0]][u[1]] == 'M':
-                w += 20
+                w += 10
             else:
                 w += 1
             if w < dp[v[0]][v[1]]:
@@ -190,6 +197,7 @@ def createPrisonTreasure():
     
     # list of prison that can't go to treasure
     lstPrison = checkIsReachable(treasure, prison)
+    #print(lstPrison)
     for u in lstPrison:
         createPathToTreasure(u, treasure[0])
     # check again
@@ -238,6 +246,8 @@ def printToFile():
                     sTmp = sTmp + specialMap[i][j]
                 else:
                     sTmp = ' '+sTmp
+                while len(sTmp) < 4:
+                    sTmp = ' ' + sTmp
                 if len(tmp):
                     tmp += "; "
                 tmp += sTmp

@@ -220,13 +220,13 @@ def doSTH(action):
             status = "WIN"
         Ax = u[0]
         Ay = u[1]
-        return
+        return 0
 
     if action[0] == 1:
         u = action[1]
         LOG.append("AGENT VERIFY HINT " + str(u) + " " + str(hintList[u]))
         agent.getVerification(hintList[u])
-        return
+        return 1
 
     if action[0] == 2:
         u = action[1]
@@ -241,7 +241,7 @@ def doSTH(action):
         LOG.append("AGENT SMALL SCAN")
         if abs(Tx - Ax) <= 2 and abs(Ty - Ay) <= 2:
             status = "WIN"
-        return
+        return 1
 
     if action[0] == 3:
         u = action[1]
@@ -252,13 +252,14 @@ def doSTH(action):
             if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
                 Ax += v[0]
                 Ay += v[1]
+        return 1
 
     if action[0] == 4:
         LOG.append("AGENT LARGE SCAN")
         # Large scan 7x7
         if abs(Tx - Ax) <= 3 and abs(Ty - Ay) <= 3:
             status = "WIN"
-        return
+        return 1
 
 def Reveal():
     global LOG
@@ -343,18 +344,17 @@ def startGame():
             agent.getInformation(Reveal())
         if i == 0:
             hintList.append(True)
+            turn = 2
             agent.getInformation(hintCreate(True))
-            doSTH(agent.makeMove())
-            if status == "WIN": return
-            doSTH(agent.makeMove())
-            if status == "WIN": return
+            while turn > 0:
+                turn -= doSTH(agent.makeMove())
+                if status == "WIN": return
         else:
             hintList.append(random.choice([True, False]))
             agent.getInformation(hintCreate(hintList[-1]))
-            doSTH(agent.makeMove())
-            if status == "WIN": return
-            doSTH(agent.makeMove())
-            if status == "WIN": return
+            while turn > 0:
+                turn -= doSTH(agent.makeMove())
+                if status == "WIN": return
 
     # After Pirate Out
     len = shortestPath([Px, Py], [Tx, Ty])
@@ -401,9 +401,12 @@ def input():
             s = s.replace("\n", "")
             tmp = [u for u in s.split(";")]
             for j in range(M):
-                if len(tmp[j]) == 2:
-                    specialMap[i][j] = tmp[j][1]
-                regionMap[i][j] = int(tmp[j][0])
+                if tmp[j][-1] not in "0123456789":
+                    specialMap[i][j] = tmp[j][-1]
+                    regionMap[i][j] = int(tmp[j][:len(tmp[j])-1])
+                else:
+                    regionMap[i][j] = int(tmp[j])
+                    
     tmp = []
     for i in range(N):
         for j in range(M):
@@ -421,7 +424,7 @@ def output():
 
 
 if __name__ == '__main__':
-    #MapGenerator.main(16)
+    MapGenerator.main(64)
     input()
     startGame()
     output()
