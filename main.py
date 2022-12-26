@@ -421,7 +421,7 @@ def output():
 
 
 if __name__ == '__main__':
-    MapGenerator.main(16)
+    #MapGenerator.main(16)
     input()
     startGame()
     output()
