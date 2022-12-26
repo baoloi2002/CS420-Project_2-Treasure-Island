@@ -5,6 +5,7 @@ import Visualization
 
 ################################################################################################################
 def Hint_1(isTrue):
+    global LOG
     res = []
     for u in range(15):
         x = random.randint(0, N-1)
@@ -15,9 +16,13 @@ def Hint_1(isTrue):
         pass
     else:
         res.append([Tx, Ty])
+    LOG.append(str(len(res)))
+    for u in res:
+        LOG.append(str(u[0]) + " " + str(u[1]))
     return res
 
 def Hint_2(isTrue):
+    global LOG
     res = []
     for u in range(4):
         x = random.randint(1, numRegion)
@@ -28,9 +33,15 @@ def Hint_2(isTrue):
         res.append(regionMap[Tx][Ty])
     else:
         pass
+    LOG.append(str(len(res)))
+    tmp = ""
+    for u in res:
+        tmp = tmp + " " + str(u)
+    LOG.append(tmp)
     return res
 
 def Hint_3(isTrue):
+    global LOG
     res = []
     for u in range(2):
         x = random.randint(1, numRegion)
@@ -41,9 +52,15 @@ def Hint_3(isTrue):
         pass
     else:
         res.append(regionMap[Tx][Ty])
+    LOG.append(str(len(res)))
+    tmp = ""
+    for u in res:
+        tmp = tmp + " " + str(u)
+    LOG.append(tmp)
     return res
 
 def Hint_4(isTrue):
+    global LOG
     # large rectangle > 7
     W = H = 8
     if isTrue:
@@ -65,10 +82,12 @@ def Hint_4(isTrue):
         else:
             yR = Ty - 1
             yL = yR - W + 1
-    
+    LOG.append(str(xL) + " " + str(yL))
+    LOG.append(str(xR) + " " + str(yR))
     return [[xL, yL], [xR, yR]]
 
 def Hint_5(isTrue):
+    global LOG
     # small rectangle < 7
     W = H = 5
     if isTrue:
@@ -90,59 +109,75 @@ def Hint_5(isTrue):
         xR = xL + W - 1
         yL = max(Ty - H, 0)
         yR = yL + W - 1
+    LOG.append(str(xL) + " " + str(yL))
+    LOG.append(str(xR) + " " + str(yR))
     
     return [[xL, yL], [xR, yR]]
 
 def Hint_6(isTrue):
+    global LOG
+    res = ""
     if isTrue:
         if abs(Ax-Tx)**2 + abs(Ay-Ty)**2 < abs(Px-Tx)**2 + abs(Py-Ty)**2:
-            return "YOU"
+            res = "YOU"
         else:
-            return "PIRATE"
+            res = "PIRATE"
     else:
         if abs(Ax-Tx)**2 + abs(Ay-Ty)**2 >= abs(Px-Tx)**2 + abs(Py-Ty)**2:
-            return "YOU"
+            res = "YOU"
         else:
-            return "PIRATE"
+            res = "PIRATE"
+    LOG.append(res)
+    return res
 
 def Hint_7(isTrue):
-    
+    global LOG
+    res = []
     if isTrue:
         if random.randint(0, 1):
-            return ["ROW", Tx]
+            res = ["ROW", Tx]
         else:
-            return ["COL", Ty]
+            res = ["COL", Ty]
     else:
         if random.randint(0, 1):
             u = random.randint(0, N-1)
             while u == Tx:
                 u = random.randint(0, N-1)
-            return ["ROW", u]
+            res = ["ROW", u]
         else:
             u = random.randint(0, M-1)
             while u == Ty:
                 u = random.randint(0, M-1)
-            return ["COL", u]
+            res = ["COL", u]
+    LOG.append(res[0])
+    LOG.append(res[1])
+    return res
     
 def Hint_8(isTrue):
+    global LOG
+    res = []
     if isTrue:
         if random.randint(0, 1):
             u = random.randint(0, N-1)
             while u == Tx:
                 u = random.randint(0, N-1)
-            return ["ROW", u]
+            res = ["ROW", u]
         else:
             u = random.randint(0, M-1)
             while u == Ty:
                 u = random.randint(0, M-1)
-            return ["COL", u]
+            res = ["COL", u]
     else:
         if random.randint(0, 1):
-            return ["ROW", Tx]
+            res = ["ROW", Tx]
         else:
-            return ["COL", Ty]
+            res = ["COL", Ty]
+    LOG.append(res[0])
+    LOG.append(res[1])
+    return res
 
 def Hint_9(isTrue):
+    global LOG
     boundary = []
     for i in range(Tx-1, Tx+2):
         for j in range(Ty-1, Ty+2):
@@ -164,50 +199,180 @@ def Hint_9(isTrue):
             if u in boundary: continue
             res.append(u)
             boundary.append(u)
+    LOG.append(str(res[0]) + " " + str(res[1]))
+    return res
 
 def Hint_10(isTrue):
+    global LOG
     if isTrue:
         pass
     else:
         pass
 
 def Hint_11(isTrue):
+    global LOG
     if isTrue:
         pass
     else:
         pass
 
 def Hint_12(isTrue):
+    global LOG
     lst = []
     lst.append([[0, 0], [N-1, M//2]])
     lst.append([[0, 0], [N//2, M-1]])
     lst.append([[N//2, 0], [N-1, M-1]])
     lst.append([[0, M//2], [N-1, M-1]])
     random.shuffle(lst)
+    res = []
     if isTrue:
         for u in lst:
             if u[0][0] <= Tx and Tx <= u[1][0] and u[0][1] <= Ty and Ty <= u[1][1]:
                 continue
-            return u
+            res = u
+            break
     else:
         for u in lst:
             if u[0][0] <= Tx and Tx <= u[1][0] and u[0][1] <= Ty and Ty <= u[1][1]:
-                return u
-    return -1
+                res = u
+                break
+    LOG.append(str(u[0][0]) + " " + str(u[0][1]))
+    LOG.append(str(u[1][0]) + " " + str(u[1][1]))
+    return res
 
 def Hint_13(isTrue):
-    if isTrue:
-        pass
+    global LOG
+    direction = ['W', 'E', 'N', 'S', 'SE', 'SW', 'NE', 'NW']
+    point = random.choice(["CENTER", "PRISON"])
+    LOG.append(point)
+    res = []
+    u = []
+    if point == "CENTER":
+        u = [N//2, M//2]
     else:
-        pass
+        u = [Px, Py]
+    res.append(point)
+    lst = []
+    X = Tx - u[0]
+    Y = Ty - u[1]
+    if X >= 0:
+        if Y >= 0:
+            lst.append('SE')
+            if Y <= X:
+                lst.append('S')
+            if Y >= X:
+                lst.append('E')
+
+        if Y <= 0:
+            lst.append('SW')
+            if -Y <= X:
+                lst.append('S')
+            if -Y >= X:
+                lst.append('W')
+    if X <= 0:
+        if Y >= 0:
+            lst.append('NE')
+            if Y <= -X:
+                lst.append('N')
+            if Y >= -X:
+                lst.append('E')
+        if Y <= 0:
+            lst.append('NW')
+            if -Y <= -X:
+                lst.append('N')
+            if -Y >= -X:
+                lst.append('W')
+
+    lst = list(set(lst))
+    if isTrue:
+        res.append(random.choice(lst))
+    else:
+        tmp = []
+        for v in direction:
+            if v not in lst:
+                tmp.append(v)
+        res.append(random.choice(tmp))
+    LOG.append(res[1])
+    return res
 
 def Hint_14(isTrue):
+    global LOG
+    res = []
     if isTrue:
-        pass
+        xL = Tx - random.randint(2, 25)
+        yL = Ty - random.randint(2, 25)
+        xR = Tx + random.randint(2, 25)
+        yR = Ty + random.randint(2, 25)
+        
+        xL = max(0, xL)
+        yL = max(0, yL)
+        xR = min(xR, N-1)
+        yR = min(yR, M-1)
+
+        res.append([[xL, yL], [xR, yR]])     
+
+        if abs(Tx - xL) > abs(Tx - xR):
+            xL += 1
+            yL += 1
+            xR -= 1
+            yR = Ty-1
+        else:
+            xL = Tx+1
+            yL += 1
+            xR -= 1
+            yR -= 1
+
+
+        res.append([[xL, yL], [xR, yR]])     
+
     else:
-        pass
+        if random.randint(0, 1):
+            xL = Tx - random.randint(0, 5)
+            yL = Ty - random.randint(0, 5)
+            xR = Tx + random.randint(0, 5)
+            yR = Ty + random.randint(0, 5)
+            xL = max(1, xL)
+            yL = max(1, yL)
+            xR = min(xR, N-2)
+            yR = min(yR, M-2)
+
+            res.append([[xL, yL], [xR, yR]])     
+
+            xL -= random.randint(0, 5)
+            yL -= random.randint(0, 5)
+            xR += random.randint(0, 5)
+            yR += random.randint(0, 5)
+
+            xL = max(0, xL)
+            yL = max(0, yL)
+            xR = min(xR, N-1)
+            yR = min(yR, M-1)
+
+            res.append([[xL, yL], [xR, yR]])        
+
+        else:
+            xL = Tx+1
+            yL = Ty+1
+            xR = xL + random.randint(2, 50) 
+            yR = yL + random.randint(2, 50) 
+            xR = min(xR, N-1)
+            yR = min(yR, M-1)
+
+            res.append([[xL, yL], [xR, yR]])      
+            xL += 1
+            yL += 1
+            xR = random.randint(xL, xR-1)
+            yR = random.randint(yL, yR-1)
+            res.append([[xL, yL], [xR, yR]])    
+    LOG.append(str(res[0][0][0]) + " " + str(res[0][0][1])) 
+    LOG.append(str(res[0][1][0]) + " " + str(res[0][1][1])) 
+    LOG.append(str(res[1][0][0]) + " " + str(res[1][0][1])) 
+    LOG.append(str(res[1][1][0]) + " " + str(res[1][1][1])) 
+    return res
+        
 
 def Hint_15(isTrue):
+    global LOG
     res = []
     for i in range(N):
         for j in range(M):
@@ -221,13 +386,18 @@ def Hint_15(isTrue):
         for i in range(1,numRegion+1):
             if i not in res:
                 tmp.append(i)
-        return tmp
+        res = tmp
+    tmp = ""
+    for u in res:
+        tmp = tmp + " " + str(u)
+    LOG.append(tmp)
     return res
 
 
 
 ################################################################################################################
 def doSTH(action):
+    direction = {0: 'N', 1: 'S', 2: 'W', 3: 'E'}
     LOG.append("AGENT")
     global Ax, Ay, status
     direction = [[-1, 0], [1, 0], [0, -1], [0, 1]]
@@ -251,23 +421,27 @@ def doSTH(action):
 
     if action[0] == 2:
         u = action[1]
-        LOG.append("AGENT ACTION 2: " + str(u))
         z = direction[u[0]]
+        LOG.append("2 MOVE " + str(u[1]) + " steps, direction " + direction[z] )
+        LOG.append(str(z))
+        LOG.append(str(u[1]))
         for i in range(u[1]):
             v = [Ax + z[0], Ay + z[1]]
             if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
                 Ax += v[0]
                 Ay += v[1]
         # Small scan 5x5
-        LOG.append("AGENT SMALL SCAN")
+        LOG.append("SMALL SCAN")
         if abs(Tx - Ax) <= 2 and abs(Ty - Ay) <= 2:
             status = "WIN"
         return 1
 
     if action[0] == 3:
         u = action[1]
-        LOG.append("AGENT ACTION 3: " + str(u))
         z = direction[u[0]]
+        LOG.append("3 MOVE " + str(u[1]) + " steps, direction " + direction[z] )
+        LOG.append(str(z))
+        LOG.append(str(u[1]))
         for i in range(u[1]):
             v = [Ax + z[0], Ay + z[1]]
             if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
@@ -276,7 +450,7 @@ def doSTH(action):
         return 1
 
     if action[0] == 4:
-        LOG.append("AGENT LARGE SCAN")
+        LOG.append("LARGE SCAN")
         # Large scan 7x7
         if abs(Tx - Ax) <= 3 and abs(Ty - Ay) <= 3:
             status = "WIN"
@@ -288,7 +462,9 @@ def Reveal():
     return [0, [Px, Py]]
 
 def hintCreate(isTrue):
-    hint = random.randint(1, 8)# 9 - 15 chưa xong
+    hint = random.randint(1, 15)# 10 - 11 chưa xong
+    if hint == 10 or hint == 11:
+        hint = 1
     LOG.append("HINT " + str(len(hintList)))
     LOG.append(str(hint))
     res = [16, [0, 0]]
@@ -442,12 +618,12 @@ def output():
         f.write(str(len(LOG)) + "\n")
         f.write(status + "\n")
         for u in LOG:
-            f.write(u + "\n")
+            f.write(str(u) + "\n")
 
 
 if __name__ == '__main__':
-    MapGenerator.main(64)
+    #MapGenerator.main(16)
     input()
     startGame()
     output()
-    Visualization.main(LOG)
+    #Visualization.main(LOG)

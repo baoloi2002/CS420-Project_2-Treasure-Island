@@ -51,10 +51,10 @@ def main(LOG):
         document.add_paragraph(u)
 
 
-        MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
-        document.add_picture("test.png", width=Inches(7))
+        #MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+        #document.add_picture("test.png", width=Inches(7))
 
-        document.add_page_break()
+        #document.add_page_break()
 
 
 

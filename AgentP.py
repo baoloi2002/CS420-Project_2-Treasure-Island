@@ -43,6 +43,7 @@ class Agent:
         return False
 
     def getInformation(self, hint):# [hint number, details] or [0, prison location] pirate Reveal
+        return
         self.hintCnt += 1
         if hint[0] == 0:
             pass
