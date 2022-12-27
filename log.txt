@@ -1,124 +1,81 @@
-149
+107
 LOSE
 START
-AGENT:11 8
+AGENT:10 9
 TURN 1
 HINT 1
-5
-8 8
-12 12
+13
+12 7
+NE
 AGENT
 LARGE SCAN
 AGENT
 LARGE SCAN
 TURN 2
 HINT 2
-8
-ROW
-7
+13
+8 8
+SW
 TURN 3
 HINT 3
-9
-10 3
+13
+8 8
+NE
 TURN 4
-Reveal 11 6
+Reveal 12 7
 HINT 4
-1
-16
-4 0
-11 3
-9 10
-1 8
-15 15
-14 15
-11 15
-11 2
-0 5
-8 1
-14 13
-6 15
-14 7
-15 5
-4 5
-7 13
+13
+8 8
+SW
 TURN 5
 HINT 5
-3
-2
- 8 5
+13
+8 8
+W
 TURN 6
 HINT 6
-1
-15
-1 1
-7 4
-5 6
-5 6
-15 4
-14 1
-1 8
-5 6
-10 15
-3 3
-1 8
-8 5
-9 7
-10 15
-10 3
+13
+8 8
+E
 TURN 7
 HINT 7
-12
-0 0
-15 8
+13
+8 8
+E
 TURN 8 : 6 turns left to pirate to the treasure
 FREE PIRATE
 HINT 8
-1
-16
-14 4
-4 12
-6 4
-0 10
-3 5
-12 9
-4 14
-4 9
-11 3
-15 11
-0 15
-6 0
-12 1
-2 1
-15 6
-7 13
+13
+12 7
+NE
 AGENT
 LARGE SCAN
 AGENT
 LARGE SCAN
 TURN 9 : 5 turns left to pirate to the treasure
 HINT 9
-5
+13
 8 8
-12 12
+S
 AGENT
 LARGE SCAN
 AGENT
 LARGE SCAN
 TURN 10 : 4 turns left to pirate to the treasure
 HINT 10
-4
-0 5
-7 12
+13
+8 8
+E
 AGENT
 LARGE SCAN
 AGENT
 LARGE SCAN
 TURN 11 : 3 turns left to pirate to the treasure
-Reveal 11 6
+Reveal 12 7
 HINT 11
-3
-3
- 4 2 1
+13
+8 8
+W
 AGENT
 LARGE SCAN
 AGENT
@@ -126,7 +83,7 @@ LARGE SCAN
 TURN 12 : 2 turns left to pirate to the treasure
 HINT 12
 13
-CENTER
+12 7
 W
 AGENT
 LARGE SCAN
@@ -134,17 +91,18 @@ AGENT
 LARGE SCAN
 TURN 13 : 1 turns left to pirate to the treasure
 HINT 13
-6
-YOU
+13
+8 8
+SE
 AGENT
 LARGE SCAN
 AGENT
 LARGE SCAN
 TURN 14 : 0 turns left to pirate to the treasure
 HINT 14
-7
-COL
 13
+12 7
+E
 AGENT
 LARGE SCAN
 AGENT

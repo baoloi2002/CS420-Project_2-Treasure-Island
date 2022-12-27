@@ -32,10 +32,342 @@ def input():
                     regionMap[i][j] = int(tmp[j])
 
 
-    
+def clearBoundary():
+    global boundaryMap
+    for i in range(N):
+        for j in range(M):
+            boundaryMap[i][j] = 0
 
-def main(LOG):
-    global document
+def hint_1():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    sz = int(sLog)
+    lst  = []
+    clearBoundary()
+    for _ in range(sz):
+        sLog = LOG.pop(0)
+        document.add_paragraph(sLog)
+        u = [int(x) for x in sLog.strip().split(' ')]
+        boundaryMap[u[0]][u[1]] = 1
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_2():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    sz = int(sLog)
+    lst  = []
+    clearBoundary()
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = [int(x) for x in sLog.strip().split(' ')]
+    for i in range(N):
+        for j in range(M):
+            if regionMap[i][j] in u:
+                boundaryMap[i][j] = 1
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_3():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    sz = int(sLog)
+    lst  = []
+    clearBoundary()
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = [int(x) for x in sLog.strip().split(' ')]
+    for i in range(N):
+        for j in range(M):
+            if regionMap[i][j] in u:
+                boundaryMap[i][j] = 1
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_4():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = [int(x) for x in sLog.strip().split(' ')]
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    v = [int(x) for x in sLog.strip().split(' ')]
+
+    if u[0] > v[0]:
+        u[0], v[0] = v[0], u[0]
+    if u[1] > v[1]:
+        u[1], v[1] = v[1], u[1]
+
+    clearBoundary()
+    for i in range(N):
+        if u[0] <= i and i <= v[0]:
+            for j in range(M):
+                if u[1] <= j and j <= v[1]:
+                    boundaryMap[i][j] = 1
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_5():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = [int(x) for x in sLog.strip().split(' ')]
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    v = [int(x) for x in sLog.strip().split(' ')]
+
+    if u[0] > v[0]:
+        u[0], v[0] = v[0], u[0]
+    if u[1] > v[1]:
+        u[1], v[1] = v[1], u[1]
+
+    clearBoundary()
+    for i in range(N):
+        if u[0] <= i and i <= v[0]:
+            for j in range(M):
+                if u[1] <= j and j <= v[1]:
+                    boundaryMap[i][j] = 1
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_6():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+
+def hint_7():
+    global LOG, boundaryMap, document
+    clearBoundary()
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    if sLog == 'ROW':
+        sLog = LOG.pop(0)
+        document.add_paragraph(sLog)
+        u = int(sLog)
+        for i in range(M):
+            boundaryMap[u][i] = 1
+    else:
+        sLog = LOG.pop(0)
+        document.add_paragraph(sLog)
+        u = int(sLog)
+        for i in range(N):
+            boundaryMap[i][u] = 1
+            
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_8():
+    global LOG, boundaryMap, document
+    clearBoundary()
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    if sLog == 'ROW':
+        sLog = LOG.pop(0)
+        document.add_paragraph(sLog)
+        u = int(sLog)
+        for i in range(M):
+            boundaryMap[u][i] = 1
+    else:
+        sLog = LOG.pop(0)
+        document.add_paragraph(sLog)
+        u = int(sLog)
+        for i in range(N):
+            boundaryMap[i][u] = 1
+
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_9():
+    global LOG, boundaryMap, document
+    clearBoundary()
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = [int(x) for x in sLog.strip().split(' ')]
+    for i in range(N):
+        for j in range(M):
+            isK = False
+            for x in range(i-1, i+2):
+                for y in range(j-1, j+2):
+                    if x >= 0 and x < N and y >= 0 and y < M:
+                        if regionMap[x][y] in u:
+                            isK = True
+            if isK:
+                boundaryMap[i][j] = True
+
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_10():
+    global LOG
+    pass
+
+def hint_11():
+    global LOG
+    pass
+
+def hint_12():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = [int(x) for x in sLog.strip().split(' ')]
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    v = [int(x) for x in sLog.strip().split(' ')]
+
+    if u[0] > v[0]:
+        u[0], v[0] = v[0], u[0]
+    if u[1] > v[1]:
+        u[1], v[1] = v[1], u[1]
+
+    clearBoundary()
+    for i in range(N):
+        if u[0] <= i and i <= v[0]:
+            for j in range(M):
+                if u[1] <= j and j <= v[1]:
+                    boundaryMap[i][j] = 1
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+def hint_13():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = [int(x) for x in sLog.strip().split(' ')]
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    direct = sLog
+    clearBoundary()
+    for i in range(N):
+        for j in range(M):
+            X = i - u[0]
+            Y = j - u[1]
+            lst = []
+            if X >= 0:
+                if Y >= 0:
+                    lst.append('SE')
+                    if Y <= X:
+                        lst.append('S')
+                    if Y >= X:
+                        lst.append('E')
+
+                if Y <= 0:
+                    lst.append('SW')
+                    if -Y <= X:
+                        lst.append('S')
+                    if -Y >= X:
+                        lst.append('W')
+            if X <= 0:
+                if Y >= 0:
+                    lst.append('NE')
+                    if Y <= -X:
+                        lst.append('N')
+                    if Y >= -X:
+                        lst.append('E')
+                if Y <= 0:
+                    lst.append('NW')
+                    if -Y <= -X:
+                        lst.append('N')
+                    if -Y >= -X:
+                        lst.append('W')
+            
+            if direct in lst:
+                boundaryMap[i][j] = 1
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+
+def hint_14():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    uX = [int(x) for x in sLog.strip().split(' ')]
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    vX = [int(x) for x in sLog.strip().split(' ')]
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = [int(x) for x in sLog.strip().split(' ')]
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    v = [int(x) for x in sLog.strip().split(' ')]
+
+    clearBoundary()
+    for i in range(N):
+            for j in range(M):
+                if ((uX[0] <= i and i < u[0]) or (v[0] < i and i <= vX[0])) and uX[1] <= j and j <= vX[1]:
+                    boundaryMap[i][j] = 1
+                if ((uX[1] <= j and j < u[1]) or (v[1] < j and j <= vX[1])) and uX[0] <= i and i <= vX[0]:
+                    boundaryMap[i][j] = 1
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+
+
+def hint_15():
+    global LOG, boundaryMap, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    u = int(sLog)
+    clearBoundary()
+    for i in range(N):
+        for j in range(M):
+            if regionMap[i][j] == u:
+                boundaryMap[i][j] =1 
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    document.add_picture("test.png", width=Inches(7))
+
+
+def hintVisual():
+    global LOG, document
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    v = int(sLog)
+    if v == 1:
+        hint_1()
+    if v == 2:
+        hint_2()
+    if v == 3:
+        hint_3()
+    if v == 4:
+        hint_4()
+    if v == 5:
+        hint_5()
+    if v == 6:
+        hint_6()
+    if v == 7:
+        hint_7()
+    if v == 8:
+        hint_8()
+    if v == 9:
+        hint_9()
+    if v == 10:
+        hint_10()
+    if v == 11:
+        hint_11()
+    if v == 12:
+        hint_12()
+    if v == 13:
+        hint_13()
+    if v == 14:
+        hint_14()
+    if v == 15:
+        hint_15()
+
+def main(log):
+    global document, LOG, colorMap
+    LOG = log
     input()
 
     colorMap = [(255, 204, 204), (153, 255, 51), (0, 255, 0), (255, 204, 153), (255, 255, 102),
@@ -47,8 +379,11 @@ def main(LOG):
     
     document = Document()
     
-    for u in LOG:
+    while len(LOG) > 0:
+        u = LOG.pop(0)
         document.add_paragraph(u)
+        if "HINT" in u:
+            hintVisual()
 
 
         #MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)

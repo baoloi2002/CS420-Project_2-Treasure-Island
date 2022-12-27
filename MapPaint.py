@@ -68,7 +68,7 @@ def boundaryDraw(i, j):
         color = (255, 0, 0)
     
 
-    image = cv2.rectangle(image, start_point, end_point, color, thickness=1)
+    image = cv2.rectangle(image, start_point, end_point, color, thickness=2)
 
 # land draw
 def regionDraw(i, j):

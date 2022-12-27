@@ -244,14 +244,14 @@ def Hint_13(isTrue):
     global LOG
     direction = ['W', 'E', 'N', 'S', 'SE', 'SW', 'NE', 'NW']
     point = random.choice(["CENTER", "PRISON"])
-    LOG.append(point)
     res = []
     u = []
     if point == "CENTER":
         u = [N//2, M//2]
     else:
         u = [Px, Py]
-    res.append(point)
+    res.append(u)
+    LOG.append(str(u[0]) + " " + str(u[1]))
     lst = []
     X = Tx - u[0]
     Y = Ty - u[1]
@@ -299,10 +299,10 @@ def Hint_14(isTrue):
     global LOG
     res = []
     if isTrue:
-        xL = Tx - random.randint(2, 25)
-        yL = Ty - random.randint(2, 25)
-        xR = Tx + random.randint(2, 25)
-        yR = Ty + random.randint(2, 25)
+        xL = Tx - random.randint(2, 10)
+        yL = Ty - random.randint(2, 10)
+        xR = Tx + random.randint(2, 10)
+        yR = Ty + random.randint(2, 10)
         
         xL = max(0, xL)
         yL = max(0, yL)
@@ -353,17 +353,25 @@ def Hint_14(isTrue):
         else:
             xL = Tx+1
             yL = Ty+1
-            xR = xL + random.randint(2, 50) 
-            yR = yL + random.randint(2, 50) 
+            xR = xL + random.randint(2, 10) 
+            yR = yL + random.randint(2, 10) 
             xR = min(xR, N-1)
             yR = min(yR, M-1)
 
             res.append([[xL, yL], [xR, yR]])      
             xL += 1
             yL += 1
-            xR = random.randint(xL, xR-1)
-            yR = random.randint(yL, yR-1)
+            xR = random.randint(xL, xR)
+            yR = random.randint(yL, yR)
             res.append([[xL, yL], [xR, yR]])    
+    if res[0][0][0] > res[0][1][0]:
+        res[0][0][0], res[0][1][0] = res[0][1][0], res[0][0][0]
+    if res[0][0][1] > res[0][1][1]:
+        res[0][0][1], res[0][1][1] = res[0][1][1], res[0][0][1]
+    if res[1][0][0] > res[1][1][0]:
+        res[1][0][0], res[1][1][0] = res[1][1][0], res[1][0][0]
+    if res[1][0][1] > res[1][1][1]:
+        res[1][0][1], res[1][1][1] = res[1][1][1], res[1][0][1]
     LOG.append(str(res[0][0][0]) + " " + str(res[0][0][1])) 
     LOG.append(str(res[0][1][0]) + " " + str(res[0][1][1])) 
     LOG.append(str(res[1][0][0]) + " " + str(res[1][0][1])) 
@@ -387,10 +395,8 @@ def Hint_15(isTrue):
             if i not in res:
                 tmp.append(i)
         res = tmp
-    tmp = ""
-    for u in res:
-        tmp = tmp + " " + str(u)
-    LOG.append(tmp)
+    res = random.choice(res)
+    LOG.append(str(res))
     return res
 
 
@@ -614,6 +620,9 @@ def input():
 
 
 def output():
+    global LOG
+    for i in range(len(LOG)):
+        LOG[i] = str(LOG[i])
     with open("Log.txt", "w") as f:
         f.write(str(len(LOG)) + "\n")
         f.write(status + "\n")
@@ -626,4 +635,4 @@ if __name__ == '__main__':
     input()
     startGame()
     output()
-    #Visualization.main(LOG)
+    Visualization.main(LOG)
