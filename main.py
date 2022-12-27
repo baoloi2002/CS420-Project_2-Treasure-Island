@@ -535,6 +535,7 @@ def shortestPath(s, t): # BFS to find shortest path
 def getPlayerMaskToLOG():
     global LOG, agent
     LOG.append("MASK")
+    LOG.append(str(Ax) + " " + str(Ay))
     a = agent.getMASK()
     for i in range(N):
         tmp = ""
@@ -557,7 +558,7 @@ def startGame():
 
     agent = Agent(N, M, regionMap, specialMap, Ax, Ay)# START GAME INPUT MAP and current location
     LOG.append("START")
-    LOG.append("AGENT:" + str(Ax) + " " + str(Ay))
+    LOG.append("AGENT: " + str(Ax) + " " + str(Ay))
     # Before Pirate Out (N turns)
     hintList = []
     for i in range(pirateFree-1):       

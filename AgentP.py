@@ -16,12 +16,13 @@ class Agent:
         self.hintMAP = {}
         self.hintSIX = []
         self.hintCnt = 0
+        self.isTele = True
 
-    def find(self, tmpMask):
+    def count(self, a):
         cnt = 0
         for i in range(self.N):
             for j in range(self.M):
-                if self.mask[i][j] == 0 and tmpMask[i][j] == 1:
+                if a[i][j] == 1:
                     cnt += 1
         return cnt
 
@@ -314,11 +315,32 @@ class Agent:
                 self.hintLst.pop(0)
             else:
                 break
-        
+        # TELEPORT TO THE ONLY REMAIN tile
+        if self.count(self.mask) == self.N * self.M - 1:
+            for i in range(self.N):
+                for j in range(self.M):
+                    if self.mask[i][j] == 0:
+                        return [0, [i, j]]
+
         if len(self.hintLst) > 0:
+            # VERIFY
             return [1, self.hintLst[0]]
         else:
+            # BIG SCAN
+            isK = False
+            for i in range(self.Ax-3, self.Ax+4):
+                if 0 <= i and i < self.N:
+                    for j in range(self.Ay-3, self.Ay+4):
+                        if 0 <= j and j < self.M:
+                            if not self.mask[i][j]:
+                                self.mask[i][j] = 1
+                                isK = True
+            if isK:
+                return [4]
+            
             return [4]
+
+
 
     
     def updateMask(self, hint, isTrue):

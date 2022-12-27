@@ -51,6 +51,19 @@ def prisonDraw(i, j):
     image = cv2.line(image, (x, (y+yy)//2), (xx, (y+yy)//2), color, 2)
     image = cv2.line(image, ((x+xx)//2, y), ((x+xx)//2, yy), color, 2)
 
+# prison Draw
+def agentDraw(i, j):
+    global image
+    x = j*boxW + leftCorner
+    y = i*boxH + topCorner
+    xx = x + boxW-1
+    yy = y + boxH-1
+
+    color = (0, 0, 0)
+    image = cv2.line(image, (x, y), ((x+xx)//2, yy), color, 2)
+    image = cv2.line(image, ((x+xx)//2, yy), (xx, y), color, 2)
+    image = cv2.line(image, (x, (y+yy)//2), (xx, (y+yy)//2), color, 2)
+
 # boundary draw
 def boundaryDraw(i, j):
     global image
@@ -63,7 +76,7 @@ def boundaryDraw(i, j):
     end_point = (xx, yy)
 
     if boundaryMap[i][j] == 0:
-        color = (255, 255, 255)
+        color = (0, 0, 0)
     else:
         color = (255, 0, 0)
     
@@ -84,6 +97,21 @@ def regionDraw(i, j):
     color = colorMap[regionMap[i][j]]
 
     image = cv2.rectangle(image, start_point, end_point, color=color, thickness=-1)
+
+# land draw
+def regionDrawEMPTY(i, j):
+    global image
+    x = j*boxW + leftCorner
+    y = i*boxH + topCorner
+    xx = x + boxW-1
+    yy = y + boxH-1
+    
+    start_point = (x, y)
+    end_point = (xx, yy)
+
+    color = (255, 255, 255)
+
+    image = cv2.rectangle(image, start_point, end_point, color=color, thickness=-1)
     
 
 # speacial draw
@@ -94,6 +122,8 @@ def specialDraw(i, j):
         mountainDraw(i, j)
     elif specialMap[i][j] == 'P':
         prisonDraw(i, j)
+    elif specialMap[i][j] == 'A':
+        agentDraw(i, j)
 
 # MAP DRAWER
 def mapDrawer():
@@ -101,11 +131,13 @@ def mapDrawer():
         for j in range(M):
             if not maskMap[i][j]:
                 regionDraw(i, j)
+            else:
+                regionDrawEMPTY(i, j)
             specialDraw(i, j)
             boundaryDraw(i, j)            
 
 # MAIN
-def main(scWidth, scHeight, row, col, region, special, boundary, mask, Tx, Ty, color):
+def main(scWidth, scHeight, row, col, region, special, boundary, mask, Tx, Ty, Ax, Ay, color):
 
 
     global image
@@ -124,6 +156,7 @@ def main(scWidth, scHeight, row, col, region, special, boundary, mask, Tx, Ty, c
     regionMap = region
     specialMap = special
     specialMap[Tx][Ty] = 'T'
+    specialMap[Ax][Ay] = 'A'
     boundaryMap = boundary
     maskMap = mask
     
