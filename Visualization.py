@@ -7,6 +7,7 @@ import random
 
 def input():
     global N, M, regionMap, specialMap, pirateReveal, pirateFree, numRegion, Tx, Ty, boundaryMap
+    global maskMap
     with open("Map.txt", "r") as f:
         N, M = [int(u) for u in f.readline().split()]
         pirateReveal = int(f.readline()) 
@@ -19,6 +20,7 @@ def input():
         specialMap = [[' ' for j in range(M)] for i in range(N)]
         # Map with boundary
         boundaryMap = [[0 for j in range(M)] for i in range(N)]
+        maskMap = [[0 for j in range(M)] for i in range(N)]
 
         for i in range(N):
             s = f.readline().replace(" ", "")
@@ -51,7 +53,7 @@ def hint_1():
         u = [int(x) for x in sLog.strip().split(' ')]
         boundaryMap[u[0]][u[1]] = 1
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_2():
@@ -69,7 +71,7 @@ def hint_2():
             if regionMap[i][j] in u:
                 boundaryMap[i][j] = 1
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_3():
@@ -87,7 +89,7 @@ def hint_3():
             if regionMap[i][j] in u:
                 boundaryMap[i][j] = 1
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_4():
@@ -111,7 +113,7 @@ def hint_4():
                 if u[1] <= j and j <= v[1]:
                     boundaryMap[i][j] = 1
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_5():
@@ -135,7 +137,7 @@ def hint_5():
                 if u[1] <= j and j <= v[1]:
                     boundaryMap[i][j] = 1
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_6():
@@ -161,7 +163,7 @@ def hint_7():
         for i in range(N):
             boundaryMap[i][u] = 1
             
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_8():
@@ -182,7 +184,7 @@ def hint_8():
         for i in range(N):
             boundaryMap[i][u] = 1
 
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_9():
@@ -202,7 +204,7 @@ def hint_9():
             if isK:
                 boundaryMap[i][j] = True
 
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_10():
@@ -234,7 +236,7 @@ def hint_12():
                 if u[1] <= j and j <= v[1]:
                     boundaryMap[i][j] = 1
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 def hint_13():
@@ -282,7 +284,7 @@ def hint_13():
             if direct in lst:
                 boundaryMap[i][j] = 1
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 
@@ -309,7 +311,7 @@ def hint_14():
                 if ((uX[1] <= j and j < u[1]) or (v[1] < j and j <= vX[1])) and uX[0] <= i and i <= vX[0]:
                     boundaryMap[i][j] = 1
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 
@@ -325,7 +327,7 @@ def hint_15():
             if regionMap[i][j] == u:
                 boundaryMap[i][j] =1 
     
-    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
 
@@ -365,8 +367,20 @@ def hintVisual():
     if v == 15:
         hint_15()
 
+def maskPaint():
+    global LOG, boundaryMap, document
+    for i in range(N):
+        sLog = LOG.pop(0)
+        document.add_paragraph(sLog)
+        a = [int(u) for u in sLog.strip().split(" ")]
+        for j in range(M):
+            if a[j]:
+                maskMap[i][j] = 1
+
+
 def main(log):
     global document, LOG, colorMap
+    
     LOG = log
     input()
 
@@ -384,6 +398,8 @@ def main(log):
         document.add_paragraph(u)
         if "HINT" in u:
             hintVisual()
+        if "MASK" in u:
+            maskPaint()
 
 
         #MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, Tx, Ty, colorMap)

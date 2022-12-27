@@ -99,17 +99,18 @@ def specialDraw(i, j):
 def mapDrawer():
     for i in range(N):
         for j in range(M):
-            regionDraw(i, j)
+            if not maskMap[i][j]:
+                regionDraw(i, j)
             specialDraw(i, j)
             boundaryDraw(i, j)            
 
 # MAIN
-def main(scWidth, scHeight, row, col, region, special, boundary, Tx, Ty, color):
+def main(scWidth, scHeight, row, col, region, special, boundary, mask, Tx, Ty, color):
 
 
     global image
     global mapHeight, mapWidth
-    global regionMap, specialMap, boundaryMap, N, M, boxH, boxW
+    global regionMap, specialMap, boundaryMap, N, M, boxH, boxW, maskMap
     global colorMap
     global leftCorner, topCorner
 
@@ -124,6 +125,7 @@ def main(scWidth, scHeight, row, col, region, special, boundary, Tx, Ty, color):
     specialMap = special
     specialMap[Tx][Ty] = 'T'
     boundaryMap = boundary
+    maskMap = mask
     
     leftCorner = 0
     topCorner = 0

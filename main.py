@@ -64,10 +64,10 @@ def Hint_4(isTrue):
     # large rectangle > 7
     W = H = 8
     if isTrue:
-        xL = max(Tx - W, 0)
+        xL = max(Tx - W//2, 0)
         xR = xL + W - 1
-        yL = max(Ty - H, 0)
-        yR = yL + W - 1
+        yL = max(Ty - H//2, 0)
+        yR = yL + H - 1
     else:
         if Tx + W < N:
             xL = Tx + 1
@@ -82,6 +82,8 @@ def Hint_4(isTrue):
         else:
             yR = Ty - 1
             yL = yR - W + 1
+    xR = min(xR, N-1)
+    yR = min(yR, M-1)
     LOG.append(str(xL) + " " + str(yL))
     LOG.append(str(xR) + " " + str(yR))
     return [[xL, yL], [xR, yR]]
@@ -105,10 +107,12 @@ def Hint_5(isTrue):
             yR = Ty - 1
             yL = yR - W + 1
     else:
-        xL = max(Tx - W, 0)
+        xL = max(Tx - W//2, 0)
         xR = xL + W - 1
-        yL = max(Ty - H, 0)
-        yR = yL + W - 1
+        yL = max(Ty - H//2, 0)
+        yR = yL + H - 1
+    xR = min(xR, N-1)
+    yR = min(yR, M-1)
     LOG.append(str(xL) + " " + str(yL))
     LOG.append(str(xR) + " " + str(yR))
     
@@ -121,12 +125,12 @@ def Hint_6(isTrue):
         if abs(Ax-Tx)**2 + abs(Ay-Ty)**2 < abs(Px-Tx)**2 + abs(Py-Ty)**2:
             res = "YOU"
         else:
-            res = "PIRATE"
+            res = "PRISON"
     else:
         if abs(Ax-Tx)**2 + abs(Ay-Ty)**2 >= abs(Px-Tx)**2 + abs(Py-Ty)**2:
             res = "YOU"
         else:
-            res = "PIRATE"
+            res = "PRISON"
     LOG.append(res)
     return res
 
@@ -236,8 +240,8 @@ def Hint_12(isTrue):
             if u[0][0] <= Tx and Tx <= u[1][0] and u[0][1] <= Ty and Ty <= u[1][1]:
                 res = u
                 break
-    LOG.append(str(u[0][0]) + " " + str(u[0][1]))
-    LOG.append(str(u[1][0]) + " " + str(u[1][1]))
+    LOG.append(str(res[0][0]) + " " + str(res[0][1]))
+    LOG.append(str(res[1][0]) + " " + str(res[1][1]))
     return res
 
 def Hint_13(isTrue):
@@ -421,8 +425,8 @@ def doSTH(action):
         u = action[1]
         LOG.append("VERIFY")
         LOG.append(str(u))
-        LOG.append(str(hintList[u]))
-        agent.getVerification(hintList[u])
+        LOG.append(str(hintList[u-1]))
+        agent.getVerification([u,hintList[u-1]])
         return 1
 
     if action[0] == 2:
@@ -528,6 +532,19 @@ def shortestPath(s, t): # BFS to find shortest path
     return -1
 
 
+def getPlayerMaskToLOG():
+    global LOG, agent
+    LOG.append("MASK")
+    a = agent.getMASK()
+    for i in range(N):
+        tmp = ""
+        for j in range(M):
+            if len(tmp) > 0:
+                tmp += " "
+            tmp += str(a[i][j])
+        LOG.append(tmp)
+
+
 def startGame():
     global agent, LOG, status, hintList, Ax, Ay
     while True:
@@ -551,14 +568,18 @@ def startGame():
             hintList.append(True)
             turn = 2
             agent.getInformation(hintCreate(True))
+
             while turn > 0:
                 turn -= doSTH(agent.makeMove())
+                getPlayerMaskToLOG()
                 if status == "WIN": return
         else:
             hintList.append(random.choice([True, False]))
             agent.getInformation(hintCreate(hintList[-1]))
+
             while turn > 0:
                 turn -= doSTH(agent.makeMove())
+                getPlayerMaskToLOG()
                 if status == "WIN": return
 
     # After Pirate Out
@@ -573,10 +594,12 @@ def startGame():
             agent.getInformation(Reveal())
         hintList.append(random.choice([True, False]))
         agent.getInformation(hintCreate(hintList[-1]))
-        doSTH(agent.makeMove())
-        if status == "WIN": return
-        doSTH(agent.makeMove())
-        if status == "WIN": return
+        turn = 2
+        while turn > 0:
+            turn -= doSTH(agent.makeMove())
+            getPlayerMaskToLOG()
+            if status == "WIN": return
+    
 
     # Pirate WIN
     #...
