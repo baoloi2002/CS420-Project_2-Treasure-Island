@@ -376,12 +376,14 @@ def maskPaint():
     Ay = u[1]
     for i in range(N):
         sLog = LOG.pop(0)
-        document.add_paragraph(sLog)
+        #document.add_paragraph(sLog)
         a = [int(u) for u in sLog.strip().split(" ")]
         for j in range(M):
             if a[j]:
                 maskMap[i][j] = 1
-
+    
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, Ax, Ay, colorMap)
+    document.add_picture("test.png", width=Inches(7))
 
 def main(log):
     global document, LOG, colorMap, Ax, Ay

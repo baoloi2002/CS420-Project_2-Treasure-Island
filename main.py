@@ -415,8 +415,9 @@ def doSTH(action):
         u = action[1]
         LOG.append("TELEPORT")
         LOG.append(str(u[0]) + " " + str(u[1]))
-        if u[0] == Tx and u[1] == Ty:
-            status = "WIN"
+
+        #if u[0] == Tx and u[1] == Ty:
+        #    status = "WIN"
         Ax = u[0]
         Ay = u[1]
         return 0
@@ -645,6 +646,7 @@ def input():
 
 def output():
     global LOG
+    LOG.append(status)
     for i in range(len(LOG)):
         LOG[i] = str(LOG[i])
     with open("Log.txt", "w") as f:
@@ -655,7 +657,7 @@ def output():
 
 
 if __name__ == '__main__':
-    #MapGenerator.main(16)
+    MapGenerator.main(64)
     input()
     startGame()
     output()

@@ -18,6 +18,8 @@ class Agent:
         self.hintCnt = 0
         self.isTele = True
 
+        self.lstAction = []
+
     def count(self, a):
         cnt = 0
         for i in range(self.N):
@@ -301,6 +303,9 @@ class Agent:
         self.hintMAP[self.hintCnt] = hint
 
     def makeMove(self):
+        while len(self.lstAction) > 0:
+            return self.lstAction.pop(0)
+            
         if self.Px != -1 and self.Py != -1:
             for u in self.hintSIX:
                 self.updateMask(u, True)
@@ -320,6 +325,7 @@ class Agent:
             for i in range(self.N):
                 for j in range(self.M):
                     if self.mask[i][j] == 0:
+                        self.lstAction.append([4])
                         return [0, [i, j]]
 
         if len(self.hintLst) > 0:
