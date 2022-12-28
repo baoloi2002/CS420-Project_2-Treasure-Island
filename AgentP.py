@@ -20,6 +20,11 @@ class Agent:
 
         self.lstAction = []
 
+        for i in range(N):
+            for j in range(M):
+                if specialMap[i][j] == 'M' or regionMap[i][j] == 0:
+                    self.mask[i][j] = 1
+
     def count(self, a):
         cnt = 0
         for i in range(self.N):
@@ -301,6 +306,9 @@ class Agent:
         self.hintCnt += 1
         self.hintLst.append(self.hintCnt)
         self.hintMAP[self.hintCnt] = hint
+        if self.hintCnt == 1:                
+            self.hintVerified[self.hintCnt] = True
+            self.updateMask(self.hintMAP[1], True)
 
     def makeMove(self):
         while len(self.lstAction) > 0:
@@ -321,12 +329,14 @@ class Agent:
             else:
                 break
         # TELEPORT TO THE ONLY REMAIN tile
-        if self.count(self.mask) == self.N * self.M - 1:
-            for i in range(self.N):
-                for j in range(self.M):
-                    if self.mask[i][j] == 0:
-                        self.lstAction.append([4])
-                        return [0, [i, j]]
+        if self.isTele:
+            if self.count(self.mask) == self.N * self.M - 1:
+                self.isTele = False
+                for i in range(self.N):
+                    for j in range(self.M):
+                        if self.mask[i][j] == 0:
+                            self.lstAction.append([4])
+                            return [0, [i, j]]
 
         if len(self.hintLst) > 0:
             # VERIFY

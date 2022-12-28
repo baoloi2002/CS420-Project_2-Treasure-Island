@@ -64,24 +64,22 @@ def Hint_4(isTrue):
     # large rectangle > 7
     W = H = 8
     if isTrue:
-        xL = max(Tx - W//2, 0)
-        xR = xL + W - 1
-        yL = max(Ty - H//2, 0)
-        yR = yL + H - 1
+        while True:
+            xL = random.randint(0, N-W)
+            yL = random.randint(0, M-H)
+            xR = min(xL + H-1, N-1)
+            yR = min(yR + W-1, M-1)
+            if xL <= Tx and Tx <= xR and yL <= Ty and Ty <= yR:
+                break
     else:
-        if Tx + W < N:
-            xL = Tx + 1
-            xR = xL + W - 1
-        else:
-            xR = Tx - 1
-            xL = xR - W + 1
-
-        if Ty + W < M:
-            yL = Ty + 1
-            yR = yL + W - 1
-        else:
-            yR = Ty - 1
-            yL = yR - W + 1
+        while True:
+            xL = random.randint(0, N-W)
+            yL = random.randint(0, M-H)
+            xR = min(xL + H-1, N-1)
+            yR = min(yR + W-1, M-1)
+            if xL <= Tx and Tx <= xR and yL <= Ty and Ty <= yR:
+                continue
+            break
     xR = min(xR, N-1)
     yR = min(yR, M-1)
     LOG.append(str(xL) + " " + str(yL))
@@ -93,24 +91,22 @@ def Hint_5(isTrue):
     # small rectangle < 7
     W = H = 5
     if isTrue:
-        if Tx + W < N:
-            xL = Tx + 1
-            xR = xL + W - 1
-        else:
-            xR = Tx - 1
-            xL = xR - W + 1
-
-        if Ty + W < M:
-            yL = Ty + 1
-            yR = yL + W - 1
-        else:
-            yR = Ty - 1
-            yL = yR - W + 1
+        while True:
+            xL = random.randint(0, N-W)
+            yL = random.randint(0, M-H)
+            xR = min(xL + H-1, N-1)
+            yR = min(yR + W-1, M-1)
+            if xL <= Tx and Tx <= xR and yL <= Ty and Ty <= yR:
+                continue
+            break
     else:
-        xL = max(Tx - W//2, 0)
-        xR = xL + W - 1
-        yL = max(Ty - H//2, 0)
-        yR = yL + H - 1
+        while True:
+            xL = random.randint(0, N-W)
+            yL = random.randint(0, M-H)
+            xR = min(xL + H-1, N-1)
+            yR = min(yR + W-1, M-1)
+            if xL <= Tx and Tx <= xR and yL <= Ty and Ty <= yR:
+                break
     xR = min(xR, N-1)
     yR = min(yR, M-1)
     LOG.append(str(xL) + " " + str(yL))
@@ -562,13 +558,13 @@ def startGame():
     LOG.append("AGENT: " + str(Ax) + " " + str(Ay))
     # Before Pirate Out (N turns)
     hintList = []
-    for i in range(pirateFree-1):       
+    for i in range(pirateFree-1):    
+        turn = 2   
         LOG.append("TURN "+str(i+1))
         if i+1 == pirateReveal:
             agent.getInformation(Reveal())
         if i == 0:
             hintList.append(True)
-            turn = 2
             agent.getInformation(hintCreate(True))
 
             while turn > 0:
@@ -589,6 +585,7 @@ def startGame():
     len = (len+1)//2
 
     for i in range(len):        
+        turn = 2
         LOG.append("TURN "+str(i+pirateFree) + " : " + str(len-i-1) + " turns left to pirate to the treasure")
         if i == 0:
             LOG.append("FREE PIRATE")
@@ -596,7 +593,6 @@ def startGame():
             agent.getInformation(Reveal())
         hintList.append(random.choice([True, False]))
         agent.getInformation(hintCreate(hintList[-1]))
-        turn = 2
         while turn > 0:
             turn -= doSTH(agent.makeMove())
             getPlayerMaskToLOG()
