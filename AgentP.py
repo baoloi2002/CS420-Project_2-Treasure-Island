@@ -335,6 +335,8 @@ class Agent:
                 for i in range(self.N):
                     for j in range(self.M):
                         if self.mask[i][j] == 0:
+                            self.Ax = i
+                            self.Ay = j
                             self.lstAction.append([4])
                             return [0, [i, j]]
 

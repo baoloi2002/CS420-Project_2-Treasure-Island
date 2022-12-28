@@ -68,7 +68,7 @@ def Hint_4(isTrue):
             xL = random.randint(0, N-W)
             yL = random.randint(0, M-H)
             xR = min(xL + H-1, N-1)
-            yR = min(yR + W-1, M-1)
+            yR = min(yL + W-1, M-1)
             if xL <= Tx and Tx <= xR and yL <= Ty and Ty <= yR:
                 break
     else:
@@ -76,7 +76,7 @@ def Hint_4(isTrue):
             xL = random.randint(0, N-W)
             yL = random.randint(0, M-H)
             xR = min(xL + H-1, N-1)
-            yR = min(yR + W-1, M-1)
+            yR = min(yL + W-1, M-1)
             if xL <= Tx and Tx <= xR and yL <= Ty and Ty <= yR:
                 continue
             break
@@ -95,7 +95,7 @@ def Hint_5(isTrue):
             xL = random.randint(0, N-W)
             yL = random.randint(0, M-H)
             xR = min(xL + H-1, N-1)
-            yR = min(yR + W-1, M-1)
+            yR = min(yL + W-1, M-1)
             if xL <= Tx and Tx <= xR and yL <= Ty and Ty <= yR:
                 continue
             break
@@ -104,7 +104,7 @@ def Hint_5(isTrue):
             xL = random.randint(0, N-W)
             yL = random.randint(0, M-H)
             xR = min(xL + H-1, N-1)
-            yR = min(yR + W-1, M-1)
+            yR = min(yL + W-1, M-1)
             if xL <= Tx and Tx <= xR and yL <= Ty and Ty <= yR:
                 break
     xR = min(xR, N-1)

@@ -140,6 +140,9 @@ def hint_5():
     MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, Ax, Ay, colorMap)
     document.add_picture("test.png", width=Inches(7))
 
+def distance(u, v):
+    return abs(u[0] - v[0]) + abs(u[1] - v[1])
+
 def hint_6():
     global LOG, boundaryMap, document
     sLog = LOG.pop(0)
