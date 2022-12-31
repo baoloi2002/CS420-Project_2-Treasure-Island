@@ -84,7 +84,7 @@ class Agent:
                 a[i][j] = 1
         if not isTrue:
             return self.reverseMask(a)
-        return self.reverseMask(a)
+        return a
 
     def Hint_5(self, hint, isTrue):
         a = [[0 for j in range(self.M)] for i in range(self.N)]
@@ -149,29 +149,76 @@ class Agent:
         return a
 
     def Hint_9(self, hint, isTrue):
-        a = [[0 for j in range(self.M)] for i in range(self.N)]
+        a = [[1 for j in range(self.M)] for i in range(self.N)]
+        k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        if (len(hint)<2):
+            return self.reverseMask(a)
+        # for i in range(self.N):
+        #     for j in range(self.M):
+        #         isK = False
+        #         for x in range(i-1, i+2):
+        #             for y in range(j-1, j+2):
+        #                 if x >= 0 and x < self.N and y >= 0 and y < self.M:
+        #                     if self.regionMap[x][y] in hint:
+        #                         isK = True
+        #         if isK:
+        #             a[i][j] = 1
+
+        
         for i in range(self.N):
             for j in range(self.M):
-                isK = False
-                for x in range(i-1, i+2):
-                    for y in range(j-1, j+2):
-                        if x >= 0 and x < self.N and y >= 0 and y < self.M:
-                            if self.regionMap[x][y] in hint:
-                                isK = True
-                if isK:
-                    a[i][j] = 1
+                if self.regionMap[i][j] in hint:
+                    tem =[]
+                    for z in k:
+                        if i+z[0] <0 or i+z[0]>=self.N or j+z[1] <0 or j+z[1]>=self.M:
+                            continue
+                        v = [i+z[0], j+z[1]]
+                        tem.append(v)
+                    for t in tem:
+                        if self.regionMap[t[0]][t[1]] not in hint:
+                            continue
+                        if self.regionMap[t[0]][t[1]] != self.regionMap[i][j] and self.regionMap[t[0]][t[1]] !=0:
+                            a[i][j]=0
+                            a[t[0]][t[1]]=0
         if isTrue:
-            return self.reverseMask(a)
-        return a
-
+            return a
+        return self.reverseMask(a)
 
     def Hint_10(self, hint, isTrue):
-        a = [[0 for j in range(self.M)] for i in range(self.N)]
-        return a
+        a = [[1 for j in range(self.M)] for i in range(self.N)]
+        k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        if (hint[0]==False):
+            return self.reverseMask(a)
+        for i in range(self.N):
+            for j in range(self.M):            
+                tem =[]
+                for z in k:
+                    if i+z[0] <0 or i+z[0]>=self.N or j+z[1] <0 or j+z[1]>=self.M:
+                        continue
+                    v = [i+z[0], j+z[1]]
+                    tem.append(v)
+                for t in tem:
+                    if self.regionMap[t[0]][t[1]] != self.regionMap[i][j] and self.regionMap[t[0]][t[1]] !=0 and self.regionMap[i][j] !=0:
+                        a[i][j]=0
+                        a[t[0]][t[1]]=0
+        if isTrue:
+            return a
+        return self.reverseMask(a)
 
     def Hint_11(self, hint, isTrue):
         a = [[0 for j in range(self.M)] for i in range(self.N)]
-        return a
+        if (hint[0]==False):
+            return a
+        for i in range(self.N):
+            for j in range(self.M):
+                if self.regionMap[i][j] ==0:
+                    for x in range(i-4, i+5):
+                        for y in range(j-4, j+5):
+                            if x < 0 or y < 0 or x >= N or y >= M: continue
+                            a[x][y]=1
+        if isTrue:
+            return a
+        return self.reverseMask(a)
 
     def Hint_12(self, hint, isTrue):
         a = [[0 for j in range(self.M)] for i in range(self.N)]

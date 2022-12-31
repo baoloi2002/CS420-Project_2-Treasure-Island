@@ -178,43 +178,67 @@ def Hint_8(isTrue):
 
 def Hint_9(isTrue):
     global LOG
-    boundary = []
-    for i in range(Tx-1, Tx+2):
-        for j in range(Ty-1, Ty+2):
-            if i < 0 or j < 0 or i >= N or j >= M: continue
-            if regionMap[i][j] not in boundary:
-                boundary.append(regionMap[i][j])
+    # boundary = []
+    # for i in range(Tx-1, Tx+2):
+    #     for j in range(Ty-1, Ty+2):
+    #         if i < 0 or j < 0 or i >= N or j >= M: continue
+    #         if regionMap[i][j] not in boundary:
+    #             boundary.append(regionMap[i][j])
 
-    res = []
-    if isTrue:
-        res.append(random.choice(boundary))
-        while len(res) < 2:
-            u = random.randint(0, numRegion)
-            if u in boundary: continue
-            res.append(u)
-            boundary.append(u)
-    else:
-        while len(res) < 2:
-            u = random.randint(0, numRegion)
-            if u in boundary: continue
-            res.append(u)
-            boundary.append(u)
-    LOG.append(str(res[0]) + " " + str(res[1]))
+    # res = []
+    # if isTrue:
+    #     res.append(random.choice(boundary))
+    #     while len(res) < 2:
+    #         u = random.randint(0, numRegion)
+    #         if u in boundary: continue
+    #         res.append(u)
+    #         boundary.append(u)
+    # else:
+    #     while len(res) < 2:
+    #         u = random.randint(0, numRegion)
+    #         if u in boundary: continue
+    #         res.append(u)
+    #         boundary.append(u)
+    res =[]
+    res.append(regionMap[Tx][Ty])
+    k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+    for z in k:
+        if Tx+z[0] <0 or Tx+z[0]>=M or Ty+z[1] <0 or Ty+z[1]>=N:
+            continue
+        v = [Tx+z[0], Ty+z[1]]
+        if regionMap[v[0]][v[1]] != regionMap[Tx][Ty] and regionMap[v[0]][v[1]] != 0:
+            res.append(regionMap[v[0]][v[1]])
+            LOG.append(str(res[0]) + " " + str(res[1]))
+            return res
+    LOG.append(str(res[0]))
     return res
 
 def Hint_10(isTrue):
     global LOG
-    if isTrue:
-        pass
-    else:
-        pass
+    res =[]
+    res.append(regionMap[Tx][Ty])
+    k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+    for z in k:
+        if Tx+z[0] <0 or Tx+z[0]>=M or Ty+z[1] <0 or Ty+z[1]>=N:
+            continue
+        v = [Tx+z[0], Ty+z[1]]
+        if regionMap[v[0]][v[1]] != regionMap[Tx][Ty] and regionMap[v[0]][v[1]] != 0:
+            res.append(regionMap[v[0]][v[1]])
+            
+    # LOG.append(str(res[0]))
+    if (len(res)>=2):
+        return [True]
+    return [False]
 
 def Hint_11(isTrue):
     global LOG
-    if isTrue:
-        pass
-    else:
-        pass
+   
+    for i in range(Tx-4, Tx+5):
+        for j in range(Ty-4, Ty+5):
+            if i < 0 or j < 0 or i >= M or j >= N: continue
+            if regionMap[i][j] ==0:
+                return [False]
+    return [True]
 
 def Hint_12(isTrue):
     global LOG
