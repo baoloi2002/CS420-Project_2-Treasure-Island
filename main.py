@@ -203,7 +203,7 @@ def Hint_9(isTrue):
     res.append(regionMap[Tx][Ty])
     k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     for z in k:
-        if Tx+z[0] <0 or Tx+z[0]>=M or Ty+z[1] <0 or Ty+z[1]>=N:
+        if Tx+z[0] <0 or Tx+z[0]>=N or Ty+z[1] <0 or Ty+z[1]>=M:
             continue
         v = [Tx+z[0], Ty+z[1]]
         if regionMap[v[0]][v[1]] != regionMap[Tx][Ty] and regionMap[v[0]][v[1]] != 0:
@@ -219,7 +219,7 @@ def Hint_10(isTrue):
     res.append(regionMap[Tx][Ty])
     k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     for z in k:
-        if Tx+z[0] <0 or Tx+z[0]>=M or Ty+z[1] <0 or Ty+z[1]>=N:
+        if Tx+z[0] <0 or Tx+z[0]>=N or Ty+z[1] <0 or Ty+z[1]>=M:
             continue
         v = [Tx+z[0], Ty+z[1]]
         if regionMap[v[0]][v[1]] != regionMap[Tx][Ty] and regionMap[v[0]][v[1]] != 0:
@@ -235,7 +235,7 @@ def Hint_11(isTrue):
    
     for i in range(Tx-4, Tx+5):
         for j in range(Ty-4, Ty+5):
-            if i < 0 or j < 0 or i >= M or j >= N: continue
+            if i < 0 or j < 0 or i >= N or j >= M: continue
             if regionMap[i][j] ==0:
                 return [False]
     return [True]
@@ -633,7 +633,7 @@ def input():
     LOG = []
     status = ""
     with open("Map.txt", "r") as f:
-        N, M = [int(u) for u in f.readline().split()]
+        M, N = [int(u) for u in f.readline().split()]
         pirateReveal = int(f.readline()) 
         pirateFree = int(f.readline()) 
         numRegion = int(f.readline())

@@ -9,7 +9,7 @@ def input():
     global N, M, regionMap, specialMap, pirateReveal, pirateFree, numRegion, Tx, Ty, boundaryMap
     global maskMap
     with open("Map.txt", "r") as f:
-        M,N = [int(u) for u in f.readline().split()]
+        M, N = [int(u) for u in f.readline().split()]
         # N, M = [int(u) for u in f.readline().split()]
         pirateReveal = int(f.readline()) 
         pirateFree = int(f.readline()) 
