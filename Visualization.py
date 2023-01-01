@@ -212,12 +212,43 @@ def hint_9():
     document.add_picture("test.png", width=Inches(7))
 
 def hint_10():
-    global LOG
-    pass
+    global LOG, boundaryMap, document
+    clearBoundary()
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    sLog = "True" in sLog
+    k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+    for i in range(N):
+        for j in range(M):
+            if regionMap[i][j] == 0: continue
+            for z in k:
+                v = [i+z[0], j+z[1]]
+                if v[0] < 0 or v[0] >= N or v[1] < 0 or v[1] >= M: continue
+                if regionMap[v[0]][v[1]] == 0: continue
+                if regionMap[v[0]][v[1]] == regionMap[i][j]: continue
+                boundaryMap[i][j] = 1
+
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, Ax, Ay, colorMap)
+    document.add_picture("test.png", width=Inches(7))
 
 def hint_11():
-    global LOG
-    pass
+    global LOG, boundaryMap, document
+    clearBoundary()
+    sLog = LOG.pop(0)
+    document.add_paragraph(sLog)
+    sLog = "True" in sLog
+    for i in range(N):
+        for j in range(M):
+            if regionMap[i][j] == 0: continue
+            for u in range(i-4, i+5):
+                for v in range(j-4, j+5):
+                    if u<0 or u>=N or v<0 or v>=M: continue
+                    if regionMap[u][v] == 0:
+                        boundaryMap[i][j] = 1
+                        break
+
+    MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, Ax, Ay, colorMap)
+    document.add_picture("test.png", width=Inches(7))
 
 def hint_12():
     global LOG, boundaryMap, document

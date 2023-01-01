@@ -187,7 +187,7 @@ class Agent:
     def Hint_10(self, hint, isTrue):
         a = [[1 for j in range(self.M)] for i in range(self.N)]
         k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-        if (hint[0]==False):
+        if (hint==False):
             return self.reverseMask(a)
         for i in range(self.N):
             for j in range(self.M):            
@@ -207,14 +207,14 @@ class Agent:
 
     def Hint_11(self, hint, isTrue):
         a = [[0 for j in range(self.M)] for i in range(self.N)]
-        if (hint[0]==False):
+        if (hint==False):
             return a
         for i in range(self.N):
             for j in range(self.M):
                 if self.regionMap[i][j] ==0:
                     for x in range(i-4, i+5):
                         for y in range(j-4, j+5):
-                            if x < 0 or y < 0 or x >= N or y >= M: continue
+                            if x < 0 or y < 0 or x >= self.N or y >= self.M: continue
                             a[x][y]=1
         if isTrue:
             return a
