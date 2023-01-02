@@ -248,7 +248,7 @@ def Hint_11(isTrue):
     global LOG
     tmp  = False
     for i in range(Tx-3, Tx+4):
-        if not tmp: break
+        if tmp: break
         for j in range(Ty-3, Ty+4):
             if i < 0 or j < 0 or i >= N or j >= M: continue
             if regionMap[i][j] ==0:
