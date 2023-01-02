@@ -197,14 +197,17 @@ def hint_9():
     sLog = LOG.pop(0)
     document.add_paragraph(sLog)
     u = [int(x) for x in sLog.strip().split(' ')]
+    k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     for i in range(N):
         for j in range(M):
             isK = False
-            for x in range(i-1, i+2):
-                for y in range(j-1, j+2):
-                    if x >= 0 and x < N and y >= 0 and y < M:
-                        if regionMap[x][y] in u:
-                            isK = True
+            for z in k:
+                x = i + z[0]
+                y = j + z[1]
+                if x >= 0 and x < N and y >= 0 and y < M:
+                    if regionMap[x][y] in u:
+                        isK = True
+                        break
             if isK:
                 boundaryMap[i][j] = True
 
@@ -404,6 +407,7 @@ def hintVisual():
 
 def maskPaint():
     global LOG, boundaryMap, document, Ax, Ay
+    clearBoundary()
     sLog = LOG.pop(0)
     document.add_paragraph(sLog)
     u = [int(x) for x in sLog.strip().split(" ")]

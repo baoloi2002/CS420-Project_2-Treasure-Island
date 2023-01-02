@@ -153,9 +153,11 @@ def main(scWidth, scHeight, row, col, region, special, boundary, mask, Tx, Ty, A
     boxH = mapHeight // N
     boxW = mapWidth // M
 
-    regionMap = region
-    specialMap = special
+    regionMap = list(region)
+    specialMap = list(special)
+    tmpT = specialMap[Tx][Ty]
     specialMap[Tx][Ty] = 'T'
+    tmpA = specialMap[Ax][Ay]
     specialMap[Ax][Ay] = 'A'
     boundaryMap = boundary
     maskMap = mask
@@ -168,5 +170,7 @@ def main(scWidth, scHeight, row, col, region, special, boundary, mask, Tx, Ty, A
     image = np.zeros((mapHeight, mapWidth, 3), np.uint8)
 
     mapDrawer()
+    specialMap[Tx][Ty] = tmpT
+    specialMap[Ax][Ay] = tmpA
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     cv2.imwrite("test.png", image)

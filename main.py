@@ -246,13 +246,13 @@ def Hint_10(isTrue):
 
 def Hint_11(isTrue):
     global LOG
-    tmp  = True
-    for i in range(Tx-4, Tx+5):
+    tmp  = False
+    for i in range(Tx-3, Tx+4):
         if not tmp: break
-        for j in range(Ty-4, Ty+5):
+        for j in range(Ty-3, Ty+4):
             if i < 0 or j < 0 or i >= N or j >= M: continue
             if regionMap[i][j] ==0:
-                tmp = False
+                tmp = True
                 break
 
     if not isTrue:
@@ -450,7 +450,7 @@ def doSTH(action):
     direction = {0: 'N', 1: 'S', 2: 'W', 3: 'E'}
     LOG.append("AGENT")
     global Ax, Ay, status
-    direction = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+    k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     if action[0] == 0:
         u = action[1]
         LOG.append("TELEPORT")
@@ -472,15 +472,15 @@ def doSTH(action):
 
     if action[0] == 2:
         u = action[1]
-        z = direction[u[0]]
-        LOG.append("2 MOVE " + str(u[1]) + " steps, direction " + direction[z] )
+        z = k[u[0]]
+        LOG.append("2 MOVE " + str(u[1]) + " steps, direction " + direction[u[0]] )
         LOG.append(str(z))
         LOG.append(str(u[1]))
         for i in range(u[1]):
             v = [Ax + z[0], Ay + z[1]]
             if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
-                Ax += v[0]
-                Ay += v[1]
+                Ax = v[0]
+                Ay = v[1]
         # Small scan 5x5
         LOG.append("SMALL SCAN")
         if abs(Tx - Ax) <= 2 and abs(Ty - Ay) <= 2:
@@ -489,15 +489,15 @@ def doSTH(action):
 
     if action[0] == 3:
         u = action[1]
-        z = direction[u[0]]
-        LOG.append("3 MOVE " + str(u[1]) + " steps, direction " + direction[z] )
+        z = k[u[0]]
+        LOG.append("3 MOVE " + str(u[1]) + " steps, direction " + direction[u[0]] )
         LOG.append(str(z))
         LOG.append(str(u[1]))
         for i in range(u[1]):
             v = [Ax + z[0], Ay + z[1]]
             if v[0] >= 0 and v[0] < N and v[1] >= 0 and v[1] < M:
-                Ax += v[0]
-                Ay += v[1]
+                Ax = v[0]
+                Ay = v[1]
         return 1
 
     if action[0] == 4:
@@ -695,7 +695,7 @@ def output():
 
 
 if __name__ == '__main__':
-    MapGenerator.main(64)
+    MapGenerator.main(32)
     input()
     startGame()
     output()
