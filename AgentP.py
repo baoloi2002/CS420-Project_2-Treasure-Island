@@ -422,7 +422,11 @@ class Agent:
                 if j <= 2:
                     tmp = self.smallScanCNT(x, y)                    
                 else:
-                    tmp = self.bigScanCNT(x, y)
+                    tmp = self.getCNT(x, y)        
+                    if tmp[0] == 0:
+                        tmp = 0
+                    else:
+                        tmp = tmp[1]/tmp[0]
 
                 if tmp <= best:
                     best = tmp
