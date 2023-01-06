@@ -18,7 +18,9 @@ class Agent:
         self.hintMAP = {}
         self.hintSIX = []
         self.hintCnt = 0
-        self.isTele = True
+        self.isTele = 2 # 0 nothing, 1 tele in last move, 2 not tele yet
+        
+        self.specHint = {15: 0, 11: 0, 10: 0, 6: 0} # type of hint that need verify first time
 
         self.lstAction = []
         
@@ -26,9 +28,13 @@ class Agent:
             for j in range(M):
                 if specialMap[i][j] == 'M' or regionMap[i][j] == 0:
                     self.mask[i][j] = 1
+
+        #########################################
+        self.bestTargetScore = -1
+        self.target = [Ax, Ay]
         
 
-    def count(self, a):
+    def count(self, a): # count 1 in a mask
         cnt = 0
         for i in range(self.N):
             for j in range(self.M):
@@ -153,23 +159,21 @@ class Agent:
 
     def Hint_9(self, hint, isTrue):
         a = [[1 for j in range(self.M)] for i in range(self.N)]
-        k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
         for i in range(self.N):
             for j in range(self.M):
                 if self.regionMap[i][j] in hint:
-                    tem =[]
-                    for z in k:
-                        if i+z[0] <0 or i+z[0]>=self.N or j+z[1] <0 or j+z[1]>=self.M:
-                            continue
-                        v = [i+z[0], j+z[1]]
-                        tem.append(v)
-                    for t in tem:
-                        if self.regionMap[t[0]][t[1]] not in hint:
-                            continue
-                        if self.regionMap[t[0]][t[1]] != self.regionMap[i][j] and self.regionMap[t[0]][t[1]] !=0:
-                            a[i][j]=0
-                            a[t[0]][t[1]]=0
+                    a[i][j] = 0
+                else:
+                    for u in range(i-1, i+2):
+                        if u < 0 or u >= self.N: continue
+                        if a[i][j] == 0: break
+                        for v in range(j-1, j+2):
+                            if v < 0 or v >= self.M: continue
+                            if self.regionMap[u][v] in hint:
+                                a[i][j] = 0
+                                break
+
         if isTrue:
             return a
         return self.reverseMask(a)
@@ -291,12 +295,20 @@ class Agent:
 
     def Hint_15(self, hint, isTrue):
         a = [[0 for j in range(self.M)] for i in range(self.N)]
+        if not isTrue:
+            hint = not hint
+        tmp = []
+        for i in range(self.N):
+            for j in range(self.M):
+                if self.specialMap[i][j] == 'M':
+                    if self.regionMap[i][j] not in tmp:
+                        tmp.append(self.regionMap[i][j])
 
         for i in range(self.N):
             for j in range(self.M):
-                if self.regionMap[i][j] == hint:
+                if self.regionMap[i][j]  in tmp:
                     a[i][j] =1 
-        if isTrue:
+        if hint:
             return self.reverseMask(a)
         return a
 
@@ -348,101 +360,124 @@ class Agent:
         if self.hintCnt == 1:                
             self.hintVerified[self.hintCnt] = True
             self.updateMask(self.hintMAP[1], True)
-    
-    def getCNT(self, x, y):
-        que = []
-        r = []
-        que.append([x,y])
-        r.append(1)
-        res = [0, 0]
-        k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-        vis = [[False for j in range(self.M)] for i in range(self.N)]
-        vis[x][y] = True
-        while len(que) > 0:
-            u = que.pop(0)
-            w = r.pop(0)
+        if hint[0] in self.specHint:
+            if self.specHint[hint[0]] == 1:
+                self.hintVerified[self.hintCnt] = True
+            else:
+                self.specHint[hint[0]] = 1
 
-            if self.mask[u[0]][u[1]] == 0:
-                res[0] += 1
-                res[1] += w//2 + abs(u[0] - x) + abs(u[1] - y)
-            
-            for z in k:
-                v = [u[0] + z[0], u[1] + z[1]]
-                if v[0] < 0 or v[0] >= self.N or v[1] < 0 or v[1] >= self.M: continue
-                if self.mask[v[0]][v[1]] == 1: continue
-                if self.regionMap[v[0]][v[1]] == 0: continue
-                if self.specialMap[v[0]][v[1]] == 'M': continue
-                if vis[v[0]][v[1]]: continue
-                vis[v[0]][v[1]] = True
-                que.append(v)
-                r.append(w+1)
 
+    def getCntLarge(self, x, y):
+        if x == -1 or y == -1: return -1
+        res = 0
+        for i in range(x-3, x+4):
+            if i < 0 or i >= self.N: continue
+            for j in range(y-3, y+4):
+                if j < 0 or j >= self.M: continue
+                if self.mask[i][j] == 0:
+                    res += 1
         return res
 
-
-    def smallScanCNT(self, x, y):
-        tmp = self.getCNT(x, y)
+    def getCntSmall(self, x, y):
+        if x == -1 or y == -1: return -1
+        res = 0
         for i in range(x-2, x+3):
+            if i < 0 or i >= self.N: continue
             for j in range(y-2, y+3):
-                if i < 0 or i>= self.N or j < 0 or j >= self.M: continue
+                if j < 0 or j >= self.M: continue
                 if self.mask[i][j] == 0:
-                    tmp[0] -= 1
-                    tmp[1] -= abs(i-x)+abs(y-j)
-        if tmp[0] == 0:
-            return 0
-        return tmp[1]/tmp[0]
+                    res += 1
+        return res
 
-    def bigScanCNT(self, x, y):
-        tmp = self.getCNT(x, y)
-        for i in range(x-3, x+4):
-            for j in range(y-3, y+4):
-                if i < 0 or i>= self.N or j < 0 or j >= self.M: continue
-                if self.mask[i][j] == 0:
-                    tmp[0] -= 1
-                    tmp[1] -= (abs(i-x)+abs(y-j))**2
-        if tmp[0] == 0:
-            return 0
-        return tmp[1]/tmp[0]
+    def fillSmall(self):
+        for i in range(self.Ax-2, self.Ax+3):
+            if i < 0 or i >= self.N: continue
+            for j in range(self.Ay-2, self.Ay+3):
+                if j < 0 or j >= self.M: continue
+                self.mask[i][j] = 1
+
+    def fillLarge(self):
+        for i in range(self.Ax-3, self.Ax+4):
+            if i < 0 or i >= self.N: continue
+            for j in range(self.Ay-3, self.Ay+4):
+                if j < 0 or j >= self.M: continue
+                self.mask[i][j] = 1
+
+    ############################################################################
+    # MAIN ALGORITHM TO FIND THE PATH #
 
     def bestAction(self):
-        #direction = {0: 'N', 1: 'S', 2: 'W', 3: 'E'}
-        k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-        best = self.bigScanCNT(self.Ax, self.Ay)
-        act = [4]
-
-        for i in range(4):
-            for j in range(1, 5):
-                tmp = 0
-                x = self.Ax + k[i][0]*j
-                y = self.Ay + k[i][1]*j
-                if x<0 or x>= self.N or y < 0 or y >= self.M: break
-                if self.specialMap[x][y] == 'M': break
-                if self.regionMap[x][y] == 0: break
-
-                if j <= 2:
-                    tmp = self.smallScanCNT(x, y)                    
-                else:
-                    tmp = self.getCNT(x, y)        
-                    if tmp[0] == 0:
-                        tmp = 0
-                    else:
-                        tmp = tmp[1]/tmp[0]
-
-                if tmp <= best:
-                    best = tmp
-                    if j <= 2:
-                        act = [2, [i, j]]
-                    else:
-                        act = [3, [i, j]]
+        self.bestTargetScore = self.getCntSmall(self.target[0], self.target[1]) + self.getCntLarge(self.target[0], self.target[1])
         
-        return act
-        
+        if len(self.lstAction) == 0 or self.bestTargetScore == 0:
+            self.bestTargetScore = -1
 
+        u = [self.Ax, self.Ay]
+        vis = [[False for j in range(self.M)] for i in range(self.N)]
+        trace = [[False for j in range(self.M)] for i in range(self.N)]
+        dp = [["" for j in range(self.M)] for i in range(self.N)]
+        k = [
+            [[-1, 0], [-2, 0], [-3, 0], [-4, 0]],
+            [[1, 0], [2, 0], [3, 0], [4, 0]],
+            [[0, -1], [0, -2], [0, -3], [0, -4]],
+            [[0, 1], [0, 2], [0, 3], [0, 4]]
+        ]
+        g = [
+            [[2, [0, 1]], [2, [0, 2]], [3, [0, 3]], [3, [0, 4]]],
+            [[2, [1, 1]], [2, [1, 2]], [3, [1, 3]], [3, [1, 4]]],
+            [[2, [2, 1]], [2, [2, 2]], [3, [2, 3]], [3, [2, 4]]],
+            [[2, [3, 1]], [2, [3, 2]], [3, [3, 3]], [3, [3, 4]]]
+        ]
+        que = []
+        que.append(u)
+        vis[u[0]][u[1]] = True
+        target = [-1, -1]
+
+        while len(que) > 0:
+            u = que.pop(0)
+            
+            tmp = self.getCntSmall(u[0], u[1]) + self.getCntLarge(u[0], u[1])
+            if tmp > self.bestTargetScore:
+                self.bestTargetScore = tmp
+                target = [u[0], u[1]]
+            
+            for x in range(len(k)):
+                for y in range(len(k[x])):
+                    z = k[x][y]
+                    v = [u[0] + z[0], u[1] + z[1]]
+                    if v[0] < 0 or v[0] >= self.N or v[1] < 0 or v[1] >= self.M: break
+                    if self.regionMap[v[0]][v[1]] == 0: break
+                    if self.specialMap[v[0]][v[1]] == 'M': break
+                    if self.specialMap[v[0]][v[1]] == 'P': break
+                    if vis[v[0]][v[1]]: continue
+                    vis[v[0]][v[1]] = True
+                    trace[v[0]][v[1]] = list(u)
+                    dp[v[0]][v[1]] = list(g[x][y])
+                    que.append(v)
+        
+        if target[0] != -1:
+            self.target = list(target)
+            u = target
+            self.lstAction = list()
+            self.lstAction.append([4])
+            while u[0] != self.Ax or u[1] != self.Ay:
+                self.lstAction.append(list(dp[u[0]][u[1]]))
+                u = trace[u[0]][u[1]]
+            self.lstAction.reverse()
+            
+        return self.lstAction.pop(0)
+
+
+    ############################################################################
 
     def makeMove(self):
-        while len(self.lstAction) > 0:
-            return self.lstAction.pop(0)
-            
+
+        if self.isTele == 1:
+            self.isTele = 0
+
+            return [4]
+        
+        # Special case hint 6    
         if self.Px != -1 and self.Py != -1:
             for u in self.hintSIX:
                 self.updateMask(u, True)
@@ -457,27 +492,27 @@ class Agent:
                 self.hintLst.pop(0)
             else:
                 break
-        # TELEPORT TO THE ONLY REMAIN tile
-        if self.isTele:
-            if self.count(self.mask) == self.N * self.M - 1:
-                self.isTele = False
-                for i in range(self.N):
-                    for j in range(self.M):
-                        if self.mask[i][j] == 0:
-                            self.Ax = i
-                            self.Ay = j
-                            self.lstAction.append([4])
-                            return [0, [i, j]]
+        
+        # ultimate step: tele
+        if self.isTele == 2:
+            for i in range(self.N):
+                for j in range(self.M):
+                    if self.regionMap[i][j] == 0: continue
+                    if self.specialMap[i][j] == 'M': continue
+                    if self.specialMap[i][j] == 'P': continue
+                    if self.getCntLarge(i, j)  + self.count(self.mask) >= self.N*self.M:
+                        self.isTele = 1
+                        return [0, [i, j]]
+
+
+
         if len(self.hintLst) > 0:
             # VERIFY
             return [1, self.hintLst[0]]
         else:
             tmp = self.bestAction()
             if tmp[0] == 4:                
-                for i in range(self.Ax-3, self.Ax+4):
-                    for j in range(self.Ay-3, self.Ay+4):
-                        if i < 0 or i>= self.N or j < 0 or j >= self.M: continue
-                        self.mask[i][j] = 1
+                self.fillLarge()
             elif tmp[0] == 2:
                 k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
                 x = self.Ax + k[tmp[1][0]][0]*tmp[1][1]
@@ -486,10 +521,8 @@ class Agent:
                 self.Ax = x
                 self.Ay = y
                 
-                for i in range(x-2, x+3):
-                    for j in range(y-2, y+3):
-                        if i < 0 or i>= self.N or j < 0 or j >= self.M: continue
-                        self.mask[i][j] = 1
+                self.fillSmall()
+
             elif tmp[0] == 3:
                 k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
                 x = self.Ax + k[tmp[1][0]][0]*tmp[1][1]
@@ -497,7 +530,8 @@ class Agent:
 
                 self.Ax = x
                 self.Ay = y
-                        
+
+
             return tmp
 
 

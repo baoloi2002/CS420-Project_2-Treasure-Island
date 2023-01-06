@@ -358,12 +358,18 @@ def hint_15():
     global LOG, boundaryMap, document
     sLog = LOG.pop(0)
     document.add_paragraph(sLog)
-    u = int(sLog)
     clearBoundary()
+    tmp = []
     for i in range(N):
         for j in range(M):
-            if regionMap[i][j] == u:
-                boundaryMap[i][j] =1 
+            if specialMap[i][j] == 'M':
+                if regionMap[i][j] not in tmp:
+                    tmp.append(regionMap[i][j])
+
+    for i in range(N):
+        for j in range(M):
+            if regionMap[i][j] in tmp:
+                boundaryMap[i][j] = 1 
     
     MapPaint.main(1600, 1600, N, M, regionMap, specialMap, boundaryMap, maskMap, Tx, Ty, Ax, Ay, colorMap)
     document.add_picture("test.png", width=Inches(7))

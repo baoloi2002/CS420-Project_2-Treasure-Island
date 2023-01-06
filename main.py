@@ -203,6 +203,7 @@ def Hint_9(isTrue):
         boundary = list(set(boundary))
         while len(res) < 2 and len(boundary) > 1:
             u = random.randint(0, numRegion-1)
+            if u in res: continue
             if u not in boundary: continue
             res.append(u)
             break
@@ -431,16 +432,14 @@ def Hint_15(isTrue):
             if specialMap[i][j] == 'M':
                 if regionMap[i][j] not in res:
                     res.append(regionMap[i][j])
-    if isTrue:
-        pass
-    else:
-        tmp = []
-        for i in range(0,numRegion):
-            if i not in res:
-                tmp.append(i)
-        res = tmp
-    res = random.choice(res)
-    LOG.append(str(res))
+    
+    tmp = False
+    if regionMap[Tx][Ty] in res:
+        tmp = True
+ 
+    if not isTrue:
+        tmp = not tmp
+    LOG.append(str(tmp))
     return res
 
 
@@ -506,6 +505,9 @@ def doSTH(action):
         if abs(Tx - Ax) <= 3 and abs(Ty - Ay) <= 3:
             status = "WIN"
         return 1
+    
+    print("WRONG ACTION")
+    return 10
 
 def Reveal():
     global LOG
@@ -602,7 +604,7 @@ def startGame():
     hintList = []
     for i in range(pirateFree-1):    
         turn = 2   
-        LOG.append("TURN "+str(i+1))
+        LOG.append("TURN "+str(i+1) + "**********************************************************")
         if i+1 == pirateReveal:
             agent.getInformation(Reveal())
         if i == 0:
@@ -621,14 +623,14 @@ def startGame():
                 turn -= doSTH(agent.makeMove())
                 getPlayerMaskToLOG()
                 if status == "WIN": return
-
+                
     # After Pirate Out
     len = shortestPath([Px, Py], [Tx, Ty])
     len = (len+1)//2
 
     for i in range(len):        
         turn = 2
-        LOG.append("TURN "+str(i+pirateFree) + " : " + str(len-i-1) + " turns left to pirate to the treasure")
+        LOG.append("TURN "+str(i+pirateFree) + " : " + str(len-i-1) + " turns left to pirate to the treasure " + "**********************************************************")
         if i == 0:
             LOG.append("FREE PIRATE")
         if i+1 == pirateReveal:
