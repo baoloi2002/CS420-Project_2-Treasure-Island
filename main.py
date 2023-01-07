@@ -636,8 +636,6 @@ def startGame():
         LOG.append("TURN "+str(i+pirateFree) + " : " + str(len-i-1) + " turns left to pirate to the treasure " + "**********************************************************")
         if i == 0:
             LOG.append("FREE PIRATE")
-        if i+1 == pirateReveal:
-            agent.getInformation(Reveal())
         hintList.append(random.choice([True, False]))
         agent.getInformation(hintCreate(hintList[-1]))
         while turn > 0:

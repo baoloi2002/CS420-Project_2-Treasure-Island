@@ -227,7 +227,7 @@ def printToFile():
         f.write(str(N) + " " + str(N) + "\n")
         tmp = random.randint(2, 4)
         f.write(str(tmp) + "\n")
-        f.write(str(random.randint(tmp+1, 7)) + "\n")
+        f.write(str(random.randint(tmp+1, 5)) + "\n")
         setReg = []
         for u in regionMap:
             for v in u:

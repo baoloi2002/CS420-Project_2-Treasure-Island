@@ -197,17 +197,15 @@ def hint_9():
     sLog = LOG.pop(0)
     document.add_paragraph(sLog)
     u = [int(x) for x in sLog.strip().split(' ')]
-    k = [[-1, 0], [1, 0], [0, -1], [0, 1]]
     for i in range(N):
         for j in range(M):
             isK = False
-            for z in k:
-                x = i + z[0]
-                y = j + z[1]
-                if x >= 0 and x < N and y >= 0 and y < M:
-                    if regionMap[x][y] in u:
-                        isK = True
-                        break
+            for x in range(i-1, i+2):
+                for y in range(j-1, j+2):
+                    if x >= 0 and x < N and y >= 0 and y < M:
+                        if regionMap[x][y] in u:
+                            isK = True
+                            break
             if isK:
                 boundaryMap[i][j] = True
 
@@ -243,8 +241,8 @@ def hint_11():
     for i in range(N):
         for j in range(M):
             if regionMap[i][j] == 0: continue
-            for u in range(i-4, i+5):
-                for v in range(j-4, j+5):
+            for u in range(i-3, i+4):
+                for v in range(j-3, j+4):
                     if u<0 or u>=N or v<0 or v>=M: continue
                     if regionMap[u][v] == 0:
                         boundaryMap[i][j] = 1
