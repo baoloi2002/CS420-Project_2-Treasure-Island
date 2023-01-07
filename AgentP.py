@@ -297,6 +297,7 @@ class Agent:
         a = [[0 for j in range(self.M)] for i in range(self.N)]
         if not isTrue:
             hint = not hint
+            isTrue = True
         tmp = []
         for i in range(self.N):
             for j in range(self.M):
@@ -352,6 +353,12 @@ class Agent:
         if hint[0] == 0:
             self.Px = hint[1][0]
             self.Py = hint[1][1]
+
+            # Special case hint 6    
+            if self.Px != -1 and self.Py != -1:
+                for u in self.hintSIX:
+                    self.updateMask(u, True)
+                self.hintSIX = list()
             return
 
         self.hintCnt += 1
@@ -477,11 +484,7 @@ class Agent:
 
             return [4]
         
-        # Special case hint 6    
-        if self.Px != -1 and self.Py != -1:
-            for u in self.hintSIX:
-                self.updateMask(u, True)
-            self.hintSIX = list()
+        
         
         for i in range(len(self.hintLst)):
             if self.hintLst[i] in self.hintVerified:

@@ -2,6 +2,7 @@ import MapGenerator
 from AgentP import Agent
 import random
 import Visualization
+import getopt, sys
 
 ################################################################################################################
 def Hint_1(isTrue):
@@ -440,7 +441,7 @@ def Hint_15(isTrue):
     if not isTrue:
         tmp = not tmp
     LOG.append(str(tmp))
-    return res
+    return tmp
 
 
 
@@ -604,6 +605,7 @@ def startGame():
     hintList = []
     for i in range(pirateFree-1):    
         turn = 2   
+        print("TURN "+str(i+1) )
         LOG.append("TURN "+str(i+1) + "**********************************************************")
         if i+1 == pirateReveal:
             agent.getInformation(Reveal())
@@ -630,6 +632,7 @@ def startGame():
 
     for i in range(len):        
         turn = 2
+        print("TURN "+str(i+pirateFree) + " : " + str(len-i-1) )
         LOG.append("TURN "+str(i+pirateFree) + " : " + str(len-i-1) + " turns left to pirate to the treasure " + "**********************************************************")
         if i == 0:
             LOG.append("FREE PIRATE")
@@ -697,7 +700,39 @@ def output():
 
 
 if __name__ == '__main__':
-    MapGenerator.main(32)
+
+    # Remove 1st argument from the
+    # list of command line arguments
+    argumentList = sys.argv[1:]
+    
+    # Options
+    options = "m:g:"
+    
+    # Long options
+    long_options = ["Map=", "Gen="]
+
+    try:
+    # Parsing argument
+        arguments, values = getopt.getopt(argumentList, options, long_options)
+        
+        # checking each argument
+        for currentArgument, currentValue in arguments:
+    
+            if currentArgument in ("-m", "--Map"):
+                print(currentValue)
+                with open(currentValue, "r") as f:
+                    lines = f.readlines()
+                    lines = [l for l in lines]
+                    with open("Map.txt", "w") as f1:
+                        f1.writelines(lines)
+                
+            elif currentArgument in ("-g", "--Gen"):
+                MapGenerator.main(int(currentValue))
+             
+    except getopt.error as err:
+        # output error, and return with an error code
+        print (str(err))
+
     input()
     startGame()
     output()

@@ -225,8 +225,9 @@ def mapGenerator():
 def printToFile():
     with  open("Map.txt", "w") as f:
         f.write(str(N) + " " + str(N) + "\n")
-        f.write(str(random.randint(2, 4)) + "\n")
-        f.write(str(random.randint(5, 30)) + "\n")
+        tmp = random.randint(2, 4)
+        f.write(str(tmp) + "\n")
+        f.write(str(random.randint(tmp+1, 7)) + "\n")
         setReg = []
         for u in regionMap:
             for v in u:
